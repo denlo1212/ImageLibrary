@@ -1,5 +1,5 @@
 input.search {
-    background-color: var(--search-color);
+    background-color: var(--secondary-color);
     border-radius: 10px;
     color: white;
     /*background: url("../images/icons/search.svg") no-repeat 13px;*/

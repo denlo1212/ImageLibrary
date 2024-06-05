@@ -1,5 +1,5 @@
 button {
-    background-color: var(--search-color);
+    background-color: var(--secondary-color);
     color: white;
     border: none;
     border-radius: 10px;
@@ -11,7 +11,7 @@ button {
 }
 
 button:hover {
-    background-color: darken(var(--search-color), 10%);
+    background-color: darken(var(--secondary-color), 10%);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 

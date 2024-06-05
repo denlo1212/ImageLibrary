@@ -59,7 +59,13 @@ function renderPagination() {
         paginationContainer.appendChild(leftArrow);
     }
 
-    for (let i = 1; i <= totalPages; i++) {
+    let startPage = currentPage - 2;
+    let endPage = currentPage + 2;
+
+    startPage = Math.max(1, startPage);
+    endPage = Math.min(totalPages, endPage);
+
+    for (let i = startPage; i <= endPage; i++) {
         const pageLink = createPageLink(i, null, i === currentPage);
         paginationContainer.appendChild(pageLink);
     }
@@ -68,7 +74,24 @@ function renderPagination() {
         const rightArrow = createPageLink(currentPage + 1, '→');
         paginationContainer.appendChild(rightArrow);
     }
+
+    // Add input field
+    const inputField = document.createElement("input");
+    inputField.type = "number";
+    inputField.min = 1;
+    inputField.max = totalPages; // Ensure totalPages is calculated correctly
+    inputField.value = currentPage;
+    inputField.addEventListener("change", (event) => {
+        let value = parseInt(event.target.value);
+        // Ensure value is within the range of 1 to totalPages
+        value = Math.max(1, Math.min(totalPages, value));
+        currentPage = value;
+        render();
+    });
+    paginationContainer.appendChild(inputField);
 }
+
+
 
 document.addEventListener("keydown", function(event) {
     if(!isDialogOpen){

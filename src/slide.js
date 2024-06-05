@@ -1,4 +1,3 @@
-const {globalShortcut } = require('electron');
 const nextButton = document.querySelector(".next");
 const prevButton = document.querySelector(".prev");
 
