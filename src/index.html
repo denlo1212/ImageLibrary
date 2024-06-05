@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="index.css">
   <script src="imageList.js" defer></script>
   <script src="menu.js" defer></script>
+  <script src="slide.js" defer></script>
 </head>
 
 <body>
@@ -20,10 +21,23 @@
   </button>
 </div>
 
-<div class="tags">
+<div class="tags-container">
+  <div>
+    fsdafas
+  </div>
+  <div>
+    fsdafdasfsfasdfdaf
+  </div>
   <div>
     test
   </div>
+  <div>
+    test
+  </div>
+  <div>
+    test
+  </div>
+  <button> &#43; </button>
 </div>
 
 <main class="gallery">
@@ -36,7 +50,7 @@
 
 <template id="image-template">
   <div class="image-container">
-    <img id="image" src="" alt="Image description">
+    <img id="image" src="" alt="Image description" data-index="">
   </div>
 </template>
 
@@ -53,9 +67,9 @@
 <dialog class="image-dialog">
   <!--    <a class="show" onclick="plusSlides(-1)"> show more</a>-->
 
-  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-  <img id="image-within-dialog" src="" alt="Image description">
-  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  <a class="prev">&#10094;</a>
+  <img id="image-within-dialog" src="" alt="Image description" data-index="" >
+  <a class="next">&#10095;</a>
 </dialog>
 
 </html>

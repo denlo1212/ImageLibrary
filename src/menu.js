@@ -1,16 +1,15 @@
 const { saveImages } = require("./imageHandler");
+const path = require('path');
 
 const addImagesButton = document.getElementById("add-images-btn");
 const loadImagesButton = document.getElementById("load-images-btn");
 
 addImagesButton.addEventListener("click", popupDialog);
 loadImagesButton.addEventListener("click", () => {
-    const sourceDirectoryPath = String(document.getElementById("image-path").value);
-
-    console.log(sourceDirectoryPath);
+    let sourceDirectoryPath = document.getElementById("image-path").value;
+    sourceDirectoryPath = path.normalize(sourceDirectoryPath);
     saveImagesFromDirectory(sourceDirectoryPath);
 });
-
 
 function popupDialog() {
     const dialog = document.querySelector(".button-dialog");
@@ -19,11 +18,10 @@ function popupDialog() {
 
 function saveImagesFromDirectory(sourceDirectoryPath) {
     const destinationDirectoryPath = "D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\outputImages";
-    sourceDirectoryPath = "D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\inputImages"
-    console.log(sourceDirectoryPath)
-    console.log(destinationDirectoryPath)
+    if (sourceDirectoryPath.startsWith('"') && sourceDirectoryPath.endsWith('"')) {
+        sourceDirectoryPath = sourceDirectoryPath.slice(1, -1);
+    }
+
     saveImages(sourceDirectoryPath, destinationDirectoryPath);
-    // location.reload();
+    location.reload()
 }
-
-

@@ -1,7 +1,15 @@
-.tags div{
+.tags-container div{
     background-color: cornflowerblue;
     padding: 5px;
-    max-width: 80px;
     border-radius: 10px;
+    min-width: 50px;
     text-align: center;
+        margin: 0 10px;
+}
+
+.tags-container button {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    align-items: center;
 }

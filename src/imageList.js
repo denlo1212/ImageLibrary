@@ -1,25 +1,23 @@
 const {loadImages} = require("./imageHandler");
 
-function renderImage(image) {
-    console.log(image.path)
-
+function renderImage(image, index) {
     const imageTemplate = document.querySelector('#image-template');
-
     const imageTemplateClone = imageTemplate.content.cloneNode(true);
     const imageContent = imageTemplateClone.querySelector(".image-container");
-    imageContent.querySelector("#image").setAttribute("src", `${image.path}`)
-    // imageContent.querySelector("image").setAttribute();
+    imageContent.querySelector("#image").setAttribute("src", `${image.path}`);
+    imageContent.setAttribute("data-index", index); // Add index as a custom attribute
     imageContent.addEventListener("click", event => {
-        showDialog(image)
-    })
+        showDialog(image, index);
+    });
 
-    return imageTemplateClone
+    return imageTemplateClone;
 }
 
-function showDialog(image){
+function showDialog(image, index){
 
-    const dialog = document.querySelector("dialog");
-    dialog.querySelector("#imageDialog").setAttribute("src", `${image.path}`)
+    const dialog = document.querySelector(".image-dialog");
+    dialog.querySelector("#image-within-dialog").setAttribute("src", `${image.path}`)
+    dialog.querySelector("#image-within-dialog").setAttribute("data-index", index)
     dialog.showModal()
 }
 
@@ -27,10 +25,10 @@ function render() {
     const imageContainer = document.querySelector(".gallery");
     imageContainer.innerHTML = '';
 
-    const images = loadImages("D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\inputImages")
+    const images = loadImages("D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\outputImages");
 
-    images.forEach(image => {
-        const imageElement = renderImage(image);
+    images.forEach((image, index) => { // Pass the index to renderImage
+        const imageElement = renderImage(image, index);
         imageContainer.appendChild(imageElement);
     });
 }

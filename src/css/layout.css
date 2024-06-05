@@ -22,12 +22,19 @@ header {
 
 .menu {
     grid-area: menu;
+    position: fixed;
 }
 
-.tags {
+.tags-container {
     grid-area: tags;
-    padding: 20px;
+    top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
+
+
 
 main.gallery {
     grid-area: main;
