@@ -1,4 +1,4 @@
-const Foto = require('../domain/foto');
+const Foto = require('./domain/foto');
 
 
 const axios = require('axios');

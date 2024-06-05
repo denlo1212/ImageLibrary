@@ -1,4 +1,4 @@
-const Foto = require("../domain/foto.js");
+const Foto = require("./domain/foto.js");
 
 
 // const sourcePath = "D:/testMap"
