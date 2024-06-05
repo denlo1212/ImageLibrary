@@ -1,0 +1,7 @@
+.tags div{
+    background-color: cornflowerblue;
+    padding: 5px;
+    max-width: 80px;
+    border-radius: 10px;
+    text-align: center;
+}

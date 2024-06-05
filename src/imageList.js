@@ -1,4 +1,4 @@
-const loadImages = require("./imageHandler");
+const {loadImages} = require("./imageHandler");
 
 function renderImage(image) {
     console.log(image.path)

@@ -1,0 +1,45 @@
+dialog{
+    background-color: var(--main-background-color);
+    border-color: var(--main-background-color);
+    justify-content: center;
+    align-items: center;
+
+}
+
+dialog img{
+    max-width: 1000px;
+    max-height: 1000px;
+}
+
+.show, .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 20px;
+    color: lightgray;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.show{
+
+}
+
+.show:hover, .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}

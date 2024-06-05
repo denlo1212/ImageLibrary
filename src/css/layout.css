@@ -1,0 +1,39 @@
+body {
+    background-color: var(--main-background-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-areas:
+        "menu header"
+        "menu tags"
+        "menu main"
+        "menu footer";
+    grid-template-columns: 1fr 10fr;
+    grid-template-rows: auto auto 1fr auto;
+    height: 100vh;
+}
+
+header {
+    grid-area: header;
+    padding: 20px;
+    text-align: center;
+}
+
+.menu {
+    grid-area: menu;
+}
+
+.tags {
+    grid-area: tags;
+    padding: 20px;
+}
+
+main.gallery {
+    grid-area: main;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 20px;
+    justify-items: center;
+}

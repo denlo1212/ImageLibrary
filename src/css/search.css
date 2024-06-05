@@ -1,0 +1,6 @@
+input.search {
+    background-color: var(--search-color);
+    border-radius: 10px;
+    color: white;
+    /*background: url("../images/icons/search.svg") no-repeat 13px;*/
+}

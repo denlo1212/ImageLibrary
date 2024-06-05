@@ -1,0 +1,20 @@
+button {
+    background-color: var(--search-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    background-color: darken(var(--search-color), 10%);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+label{
+    color: white;
+}
