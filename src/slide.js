@@ -1,3 +1,4 @@
+const {globalShortcut } = require('electron');
 const nextButton = document.querySelector(".next");
 const prevButton = document.querySelector(".prev");
 
@@ -19,8 +20,6 @@ function plusSlides(n) {
 
     imageWithinDialog.setAttribute("data-index", currentImageIndex);
 }
-
-
 document.addEventListener("keydown", function(event) {
     if (event.key === "ArrowLeft") {
         plusSlides(-1);
