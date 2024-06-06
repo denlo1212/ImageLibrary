@@ -9,7 +9,8 @@ const ImageLibrary = (function () {
             constructor() {
                 this.uniqueTags = new Set();
                 this.images = [];
-                this.loadImages("C:\\Users\\denlo\\OneDrive\\Afbeeldingen\\foto's\\Camera-album")
+                this.filteredImages = [];
+                this.loadImages("D:\\homework")
             }
 
             isImageFile(filePath) {
@@ -29,6 +30,7 @@ const ImageLibrary = (function () {
                         } else if (fs.lstatSync(filePath).isFile() && this.isImageFile(filePath)) {
                             const foto = new Foto(filePath, "placeholder", file, parentTags);
                             this.images.push(foto);
+                            this.filteredImages.push(foto)
                             parentTags.forEach(tag => this.uniqueTags.add(tag));
                         }
                     }
@@ -38,21 +40,28 @@ const ImageLibrary = (function () {
             }
 
             getAmountOfImages() {
-                return this.images.length;
+                return this.filteredImages.length;
             }
 
             getImages() {
-                return [...this.images];
+                return [...this.filteredImages];
             }
 
             filterImages(tags) {
-                return this.images.filter(image => {
-                    return tags.every(filter => image.tags.includes(filter));
-                });
+                this.filteredImages = [];
+                this.filteredImages = this.images.filter(image =>
+                    tags.every(filter => image.tags.includes(filter))
+                );
             }
+
 
             getUniqueTags() {
                 return Array.from([...this.uniqueTags]);
+            }
+
+            restoreDefault(){
+                this.filteredImages = [];
+                this.filteredImages = this.images
             }
         }
     }

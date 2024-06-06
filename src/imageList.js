@@ -33,6 +33,7 @@ function showDialog(image, index) {
     dialog.addEventListener("close", function() {
         isDialogOpen = false;
     });
+
     dialog.querySelector("#image-within-dialog").setAttribute("src", `${image.path}`);
     dialog.querySelector("#image-within-dialog").setAttribute("data-index", index);
     dialog.showModal();
@@ -40,13 +41,15 @@ function showDialog(image, index) {
 }
 
 document.addEventListener("keydown", function(event) {
+    console.log(isDialogOpen)
     if (!isDialogOpen) {
-        const totalPages = Math.ceil(library.getImages().length / imagesPerPage);
+        const totalPages = Math.ceil(library.getAmountOfImages()/ imagesPerPage);
         if (event.key === "ArrowLeft" && global.currentPage > 1) {
             event.preventDefault();
             global.currentPage--;
             render();
         } else if (event.key === "ArrowRight" && global.currentPage < totalPages) {
+            console.log("press")
             event.preventDefault();
             global.currentPage++;
             render();
@@ -98,7 +101,6 @@ function render() {
     });
 
     const totalPages = Math.ceil(library.getAmountOfImages() / imagesPerPage);
-    console.log(totalPages)
     renderPagination(totalPages, global.currentPage, updatePage);
 }
 

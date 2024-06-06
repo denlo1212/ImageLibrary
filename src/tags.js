@@ -1,29 +1,80 @@
 const ImageLibraryTags = require("./imageLibrary");
+const {render : renderFilterdImages} = require("./imageList")
 
-let currentLastTagPosition = 0
+let currentLastTagPosition = 0;
 
-function init(){
+function renderTags() {
     const library = ImageLibraryTags.getInstance();
-    const container = document.querySelector(".tags-container")
-    const uniqueTags = library.getUniqueTags()
+    const container = document.querySelector(".tags-container");
+    container.innerHTML = '';
 
-    let startTag = currentLastTagPosition + 1
-    let endTag = currentLastTagPosition + 6
+    const uniqueTags = library.getUniqueTags();
 
-    startTag = Math.max(1, startTag);
-    endTag = Math.min(uniqueTags.length, endTag);
+    let startTag = currentLastTagPosition + 1;
+    let endTag = currentLastTagPosition + 6;
 
-    container.appendChild(createTag())
+    startTag = Math.max(0, startTag);
+    endTag = Math.min(uniqueTags.length - 1, endTag);
+
+    const prevArrow = createTag("&#10094;");
+    prevArrow.addEventListener("click", () => changeTagPosition(-1));
+    container.appendChild(prevArrow);
+
     for (let i = startTag; i <= endTag; i++) {
-        container.appendChild( createTag(uniqueTags[i]));
+        const tag = createTag(uniqueTags[i]);
+        tag.addEventListener("click", (event) => handleTagClick(event, library)); // Add event listener
+        container.appendChild(tag);
     }
+
+    const nextArrow = createTag("&#10095;");
+    nextArrow.addEventListener("click", () => changeTagPosition(1));
+    container.appendChild(nextArrow);
 }
 
 
-function createTag(text){
-        const tag = document.createElement("a");
-        tag.textContent = `${text}`;
-        return tag;
+function handleTagClick(event, library) {
+    const clickedTag = event.currentTarget;
+
+    if (clickedTag.classList.contains("highlighted")) {
+        clickedTag.classList.remove("highlighted");
+        library.restoreDefault()
+        global.currentPage = 1;
+        renderFilterdImages()
+    } else {
+        clickedTag.classList.add("highlighted");
+        library.filterImages([clickedTag.text])
+        renderFilterdImages()
+    }
+
 }
 
-init()
+
+function createTag(text) {
+    const tag = document.createElement("a");
+    tag.innerHTML = text;
+    return tag;
+}
+
+function changeTagPosition(direction) {
+    const library = ImageLibraryTags.getInstance();
+    const uniqueTags = library.getUniqueTags();
+
+    currentLastTagPosition += direction * 6;
+
+    if (currentLastTagPosition < 0) {
+        currentLastTagPosition = 0;
+    } else if (currentLastTagPosition > uniqueTags.length - 6) {
+        currentLastTagPosition = uniqueTags.length - 6;
+    }
+
+    renderTags();
+}
+
+function init() {
+    document.addEventListener("DOMContentLoaded", () => {
+        renderTags();
+    });
+}
+
+init();
+
