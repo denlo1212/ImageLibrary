@@ -1,25 +1,31 @@
-const { loadImages } = require("./imageHandler");
 const { renderPagination } = require("./pagination");
-
-let images = [];
-let imagesPerPage = 0;
-let isDialogOpen = false;
+const ImageLibraryList = require("./imageLibrary");
 
 global.currentPage = 1;
 
-
+let imagesPerPage = 0;
+let isDialogOpen = false;
+const library = ImageLibraryList.getInstance();
 
 function renderImage(image, index) {
-    const imageTemplate = document.querySelector('#image-template');
-    const imageTemplateClone = imageTemplate.content.cloneNode(true);
-    const imageContent = imageTemplateClone.querySelector(".image-container");
-    imageContent.querySelector("#image").setAttribute("src", `${image.path}`);
-    imageContent.setAttribute("data-index", index);
-    imageContent.addEventListener("click", event => {
+
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'image-container';
+
+    const ImageElement = document.createElement('img');
+    ImageElement.id = image.name;
+    ImageElement.setAttribute("src",image.path)
+    ImageElement.alt = `${image.metadata}`;
+    ImageElement.setAttribute('data-index', index);
+
+    imageContainer.appendChild(ImageElement);
+
+    imageContainer.addEventListener("click", event => {
         showDialog(image, index);
     });
 
-    return imageTemplateClone;
+
+    return imageContainer;
 }
 
 function showDialog(image, index) {
@@ -35,7 +41,7 @@ function showDialog(image, index) {
 
 document.addEventListener("keydown", function(event) {
     if (!isDialogOpen) {
-        const totalPages = Math.ceil(images.length / imagesPerPage);
+        const totalPages = Math.ceil(library.getImages().length / imagesPerPage);
         if (event.key === "ArrowLeft" && global.currentPage > 1) {
             event.preventDefault();
             global.currentPage--;
@@ -57,8 +63,8 @@ function calculateImagesPerPage() {
     imageContainer.innerHTML = '';
 
     let count = 0;
-    while (!needsPageScroll() && count < images.length) {
-        const imageElement = renderImage(images[count], count);
+    while (!needsPageScroll() && count < library.getAmountOfImages()) {
+        const imageElement = renderImage(library.getImages()[count], count);
         imageContainer.appendChild(imageElement);
         count++;
     }
@@ -82,16 +88,16 @@ function render() {
     imageContainer.innerHTML = '';
 
     const startIndex = (global.currentPage - 1) * imagesPerPage;
-    const endIndex = Math.min(startIndex + imagesPerPage, images.length);
-    const imagesToRender = images.slice(startIndex, endIndex);
+    const endIndex = Math.min(startIndex + imagesPerPage, library.getAmountOfImages());
+    const imagesToRender = library.getImages().slice(startIndex, endIndex);
+
 
     imagesToRender.forEach((image, index) => {
-        console.log(image.tags)
         const imageElement = renderImage(image, index);
         imageContainer.appendChild(imageElement);
     });
 
-    const totalPages = Math.ceil(images.length / imagesPerPage);
+    const totalPages = Math.ceil(library.getAmountOfImages() / imagesPerPage);
     console.log(totalPages)
     renderPagination(totalPages, global.currentPage, updatePage);
 }
@@ -102,7 +108,6 @@ function updatePage(newPage) {
 }
 
 function init() {
-    images = loadImages("D:\\homework");
     calculateImagesPerPage();
     render();
 }

@@ -1,5 +1,5 @@
-const { saveImages } = require("./imageHandler");
 const path = require('path');
+const ImageSaver = require("./imageSaver");
 
 const addImagesButton = document.getElementById("add-images-btn");
 const loadImagesButton = document.getElementById("load-images-btn");
@@ -22,6 +22,6 @@ function saveImagesFromDirectory(sourceDirectoryPath) {
         sourceDirectoryPath = sourceDirectoryPath.slice(1, -1);
     }
 
-    saveImages(sourceDirectoryPath, destinationDirectoryPath);
+    new ImageSaver.saveImages(sourceDirectoryPath, destinationDirectoryPath);
     location.reload()
 }

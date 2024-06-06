@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image Grid</title>
-  <link rel="stylesheet" href="index.css">
-  <script src="imageList.js" defer></script>
-  <script src="menu.js" defer></script>
-  <script src="slide.js" defer></script>
+  <link rel="stylesheet" href="./index.css">
+  <script src="./imageList.js" defer></script>
+  <script src="./menu.js" defer></script>
+  <script src="slideShow.js" defer></script>
+  <script src="./tags.js" defer></script>
 </head>
 
 <body>
@@ -22,12 +23,10 @@
 </div>
 
 <div class="tags-container">
-  <div>
-    test
-  </div>
   <button> &#43; </button>
 </div>
 
+<!--will be filled up with images-->
 <main class="gallery">
 
 </main>
@@ -38,15 +37,7 @@
 </footer>
 </body>
 
-<template id="image-template">
-  <div class="image-container">
-    <img id="image" src="" alt="Image description" data-index="">
-  </div>
-</template>
 
-<template id="tag-template">
-
-</template>
 
 <dialog class="button-dialog">
   <label for="image-path">Submit:</label>
@@ -56,7 +47,6 @@
 
 <dialog class="image-dialog">
   <!--    <a class="show" onclick="plusSlides(-1)"> show more</a>-->
-
   <a class="prev">&#10094;</a>
   <img id="image-within-dialog" src="" alt="Image description" data-index="" >
   <a class="next">&#10095;</a>
