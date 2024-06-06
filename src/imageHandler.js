@@ -8,7 +8,7 @@ function isImageFile(filePath) {
     return imageExtensions.includes(ext);
 }
 
-function loadImages(directoryPath) {
+function loadImages(directoryPath, parentTags = []) {
     const images = [];
 
     if (fs.existsSync(directoryPath) && fs.lstatSync(directoryPath).isDirectory()) {
@@ -16,9 +16,11 @@ function loadImages(directoryPath) {
         for (const file of files) {
             const filePath = path.join(directoryPath, file);
             if (fs.lstatSync(filePath).isDirectory()) {
-                images.push(...loadImages(filePath));
+                // Add the current directory name to the tags and make a recursive call
+                const newTags = [...parentTags, file];
+                images.push(...loadImages(filePath, newTags));
             } else if (fs.lstatSync(filePath).isFile() && isImageFile(filePath)) {
-                images.push(new Foto(filePath, "placeholder", file, []));
+                images.push(new Foto(filePath, "placeholder", file, parentTags));
             }
         }
     } else {
@@ -27,6 +29,8 @@ function loadImages(directoryPath) {
 
     return images;
 }
+
+
 
 function saveImages(sourceDirectoryPath, destinationDirectoryPath) {
     if (fs.existsSync(sourceDirectoryPath) && fs.lstatSync(sourceDirectoryPath).isDirectory()) {

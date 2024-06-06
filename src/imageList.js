@@ -1,13 +1,13 @@
 const { loadImages } = require("./imageHandler");
+const { renderPagination } = require("./pagination");
 
 let images = [];
 let imagesPerPage = 0;
-let currentPage = 1;
 let isDialogOpen = false;
 
-function needsPageScroll() {
-    return document.body.scrollHeight > window.innerHeight;
-}
+global.currentPage = 1;
+
+
 
 function renderImage(image, index) {
     const imageTemplate = document.querySelector('#image-template');
@@ -30,83 +30,27 @@ function showDialog(image, index) {
     dialog.querySelector("#image-within-dialog").setAttribute("src", `${image.path}`);
     dialog.querySelector("#image-within-dialog").setAttribute("data-index", index);
     dialog.showModal();
-    isDialogOpen = true
+    isDialogOpen = true;
 }
-
-function renderPagination() {
-    const paginationContainer = document.querySelector(".pagination");
-    paginationContainer.innerHTML = '';
-
-    const totalPages = Math.ceil(images.length / imagesPerPage);
-
-    const createPageLink = (pageNum, text, isActive) => {
-        const pageLink = document.createElement("a");
-        pageLink.href = "#";
-        pageLink.textContent = text || pageNum;
-        if (isActive) {
-            pageLink.classList.add("active");
-        }
-        pageLink.addEventListener("click", (event) => {
-            event.preventDefault();
-            currentPage = pageNum;
-            render();
-        });
-        return pageLink;
-    };
-
-    if (currentPage > 1) {
-        const leftArrow = createPageLink(currentPage - 1, '←');
-        paginationContainer.appendChild(leftArrow);
-    }
-
-    let startPage = currentPage - 2;
-    let endPage = currentPage + 2;
-
-    startPage = Math.max(1, startPage);
-    endPage = Math.min(totalPages, endPage);
-
-    for (let i = startPage; i <= endPage; i++) {
-        const pageLink = createPageLink(i, null, i === currentPage);
-        paginationContainer.appendChild(pageLink);
-    }
-
-    if (currentPage < totalPages) {
-        const rightArrow = createPageLink(currentPage + 1, '→');
-        paginationContainer.appendChild(rightArrow);
-    }
-
-    // Add input field
-    const inputField = document.createElement("input");
-    inputField.type = "number";
-    inputField.min = 1;
-    inputField.max = totalPages; // Ensure totalPages is calculated correctly
-    inputField.value = currentPage;
-    inputField.addEventListener("change", (event) => {
-        let value = parseInt(event.target.value);
-        // Ensure value is within the range of 1 to totalPages
-        value = Math.max(1, Math.min(totalPages, value));
-        currentPage = value;
-        render();
-    });
-    paginationContainer.appendChild(inputField);
-}
-
-
 
 document.addEventListener("keydown", function(event) {
-    if(!isDialogOpen){
+    if (!isDialogOpen) {
         const totalPages = Math.ceil(images.length / imagesPerPage);
-        if (event.key === "ArrowLeft" && currentPage > 1) {
+        if (event.key === "ArrowLeft" && global.currentPage > 1) {
             event.preventDefault();
-            currentPage--;
+            global.currentPage--;
             render();
-        } else if (event.key === "ArrowRight" && currentPage < totalPages) {
+        } else if (event.key === "ArrowRight" && global.currentPage < totalPages) {
             event.preventDefault();
-            currentPage++;
+            global.currentPage++;
             render();
         }
     }
 });
+
+function needsPageScroll() {
+    return document.body.scrollHeight > window.innerHeight;
+}
 
 function calculateImagesPerPage() {
     const imageContainer = document.querySelector(".gallery");
@@ -125,7 +69,7 @@ function calculateImagesPerPage() {
         count--;
     }
 
-    // minimum value for the amount of images per page
+    // Minimum value for the amount of images per page
     if (count < 10) {
         count = 10;
     }
@@ -137,22 +81,32 @@ function render() {
     const imageContainer = document.querySelector(".gallery");
     imageContainer.innerHTML = '';
 
-    const startIndex = (currentPage - 1) * imagesPerPage;
+    const startIndex = (global.currentPage - 1) * imagesPerPage;
     const endIndex = Math.min(startIndex + imagesPerPage, images.length);
     const imagesToRender = images.slice(startIndex, endIndex);
 
     imagesToRender.forEach((image, index) => {
+        console.log(image.tags)
         const imageElement = renderImage(image, index);
         imageContainer.appendChild(imageElement);
     });
 
-    renderPagination();
+    const totalPages = Math.ceil(images.length / imagesPerPage);
+    console.log(totalPages)
+    renderPagination(totalPages, global.currentPage, updatePage);
+}
+
+function updatePage(newPage) {
+    global.currentPage = newPage;
+    render();
 }
 
 function init() {
-    images = loadImages("D:\\homework\\denlo's Bookmarks - pixiv");
+    images = loadImages("D:\\homework");
     calculateImagesPerPage();
     render();
 }
 
 init();
+
+module.exports = {render};
