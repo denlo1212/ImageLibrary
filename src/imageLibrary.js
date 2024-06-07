@@ -12,8 +12,8 @@ class ImageLibrary {
         this.backUpList = [];
         this.images = [];
 
-        // this.loadImages("C:\\Users\\denlo\\OneDrive\\Afbeeldingen\\foto's")
-        this.loadImages("D:\\homework");
+        this.loadImages("C:\\Users\\denlo\\OneDrive\\Afbeeldingen\\foto's")
+        // this.loadImages("D:\\homework");
 
         ImageLibrary.instance = this;
     }
@@ -36,10 +36,10 @@ class ImageLibrary {
                         const newTags = [...parentTags, file];
                         this.loadImages(filePath, newTags);
                     } else if (fileStat.isFile() && this.isImageFile(filePath)) {
-                        const foto = new Foto(filePath, "placeholder", file, parentTags);
+                        const foto = new Foto(filePath, "placeholder", file, parentTags.map(tag => tag.toLowerCase()));
                         this.backUpList.push(foto);
                         this.images.push(foto);
-                        parentTags.forEach(tag => this.uniqueTags.add(tag));
+                        parentTags.forEach(tag => this.uniqueTags.add(tag.toLowerCase()));
                     }
                 }
             } else {
@@ -48,6 +48,12 @@ class ImageLibrary {
         } catch (error) {
             console.error("Error loading images:", error);
         }
+
+        const sortedUniqueTags = Array.from(this.uniqueTags).sort();
+        this.uniqueTags.clear(); // Clear the set
+
+        // Add sorted tags back to the set
+        sortedUniqueTags.forEach(tag => this.uniqueTags.add(tag));
     }
 
     getAmountOfImages() {

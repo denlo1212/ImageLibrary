@@ -25,7 +25,7 @@ header {
     position: fixed;
 }
 
-.tags-container {
+.filter-container {
     grid-area: tags;
     top: 40px;
     display: flex;

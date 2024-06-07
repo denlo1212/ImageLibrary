@@ -1,48 +1,40 @@
 const libraryTags = require("./imageLibrary");
 
-let currentFirstTagPosition = 0;
 let activeTags = [];
 
 function renderTags() {
-    const container = document.querySelector(".tags-container");
-    container.innerHTML = '';
+    const filterForm = document.querySelector("#filterForm");
+    filterForm.innerHTML = '';
 
     const uniqueTags = libraryTags.getUniqueTags();
 
-    let startTag = currentFirstTagPosition;
-    let endTag = currentFirstTagPosition + 4;
+    uniqueTags.forEach(tag => {
+        const label = document.createElement("label");
+        label.innerHTML = tag;
 
-    startTag = Math.max(0, startTag);
-    endTag = Math.min(uniqueTags.length - 1, endTag);
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = tag;
 
-    const prevArrow = createTag("&#10094;");
-    prevArrow.addEventListener("click", () => changeTagPosition(-1));
-    container.appendChild(prevArrow);
-
-    for (let i = startTag; i <= endTag; i++) {
-        const tag = createTag(uniqueTags[i]);
-        if (activeTags.includes(uniqueTags[i])) {
-            tag.classList.add("highlighted");
+        if (activeTags.includes(tag)) {
+            checkbox.checked = true;
         }
-        tag.addEventListener("click", (event) => filterImages(event, libraryTags)); // Add event listener
-        container.appendChild(tag);
-    }
 
-    const nextArrow = createTag("&#10095;");
-    nextArrow.addEventListener("click", () => changeTagPosition(1));
-    container.appendChild(nextArrow);
+        checkbox.addEventListener("change", (event) => filterImages(event, libraryTags));
+
+        label.appendChild(checkbox);
+        filterForm.appendChild(label);
+    });
 }
 
 function filterImages(event, libraryTags) {
-    const clickedTag = event.currentTarget;
-    const tagText = clickedTag.innerHTML;
+    const checkbox = event.target;
+    const tagText = checkbox.value;
 
-    if (clickedTag.classList.contains("highlighted")) {
-        clickedTag.classList.remove("highlighted");
-        activeTags = activeTags.filter(tag => tag !== tagText); // Remove tag from activeTags
+    if (checkbox.checked) {
+        activeTags.push(tagText);
     } else {
-        clickedTag.classList.add("highlighted");
-        activeTags.push(tagText); // Add tag to activeTags
+        activeTags = activeTags.filter(tag => tag !== tagText);
     }
 
     if (activeTags.length === 0) {
@@ -55,29 +47,24 @@ function filterImages(event, libraryTags) {
     window.render();
 }
 
-function createTag(text) {
-    const tag = document.createElement("a");
-    tag.innerHTML = text;
-    return tag;
-}
-
-function changeTagPosition(direction) {
-    const uniqueTags = libraryTags.getUniqueTags();
-
-    currentFirstTagPosition += direction * 6;
-
-    if (currentFirstTagPosition < 0) {
-        currentFirstTagPosition = 0;
-    } else if (currentFirstTagPosition > uniqueTags.length - 6) {
-        currentFirstTagPosition = uniqueTags.length - 6;
-    }
-
-    renderTags();
-}
-
 function init() {
     document.addEventListener("DOMContentLoaded", () => {
         renderTags();
+
+        const dropdownBtn = document.querySelector(".dropdown-btn");
+        const dropdownContent = document.querySelector(".dropdown-content");
+
+        dropdownBtn.addEventListener("click", () => {
+            dropdownContent.classList.toggle("show");
+        });
+
+        window.onclick = (event) => {
+            if (!event.target.matches('.dropdown-btn')) {
+                if (dropdownContent.classList.contains('show')) {
+                    dropdownContent.classList.remove('show');
+                }
+            }
+        };
     });
 }
 
