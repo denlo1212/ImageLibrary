@@ -1,17 +1,16 @@
-const ImageLibraryTags = require("./imageLibrary");
-const {render : renderFilterdImages} = require("./imageList")
+const libraryTags = require("./imageLibrary");
 
-let currentLastTagPosition = 0;
+let currentFirstTagPosition = 0;
+let activeTags = [];
 
 function renderTags() {
-    const library = ImageLibraryTags.getInstance();
     const container = document.querySelector(".tags-container");
     container.innerHTML = '';
 
-    const uniqueTags = library.getUniqueTags();
+    const uniqueTags = libraryTags.getUniqueTags();
 
-    let startTag = currentLastTagPosition + 1;
-    let endTag = currentLastTagPosition + 6;
+    let startTag = currentFirstTagPosition;
+    let endTag = currentFirstTagPosition + 4;
 
     startTag = Math.max(0, startTag);
     endTag = Math.min(uniqueTags.length - 1, endTag);
@@ -22,7 +21,10 @@ function renderTags() {
 
     for (let i = startTag; i <= endTag; i++) {
         const tag = createTag(uniqueTags[i]);
-        tag.addEventListener("click", (event) => handleTagClick(event, library)); // Add event listener
+        if (activeTags.includes(uniqueTags[i])) {
+            tag.classList.add("highlighted");
+        }
+        tag.addEventListener("click", (event) => filterImages(event, libraryTags)); // Add event listener
         container.appendChild(tag);
     }
 
@@ -31,23 +33,27 @@ function renderTags() {
     container.appendChild(nextArrow);
 }
 
-
-function handleTagClick(event, library) {
+function filterImages(event, libraryTags) {
     const clickedTag = event.currentTarget;
+    const tagText = clickedTag.innerHTML;
 
     if (clickedTag.classList.contains("highlighted")) {
         clickedTag.classList.remove("highlighted");
-        library.restoreDefault()
-        global.currentPage = 1;
-        renderFilterdImages()
+        activeTags = activeTags.filter(tag => tag !== tagText); // Remove tag from activeTags
     } else {
         clickedTag.classList.add("highlighted");
-        library.filterImages([clickedTag.text])
-        renderFilterdImages()
+        activeTags.push(tagText); // Add tag to activeTags
     }
 
-}
+    if (activeTags.length === 0) {
+        libraryTags.restoreDefault();
+    } else {
+        libraryTags.filterImages(activeTags);
+    }
 
+    global.currentPage = 1;
+    window.render();
+}
 
 function createTag(text) {
     const tag = document.createElement("a");
@@ -56,15 +62,14 @@ function createTag(text) {
 }
 
 function changeTagPosition(direction) {
-    const library = ImageLibraryTags.getInstance();
-    const uniqueTags = library.getUniqueTags();
+    const uniqueTags = libraryTags.getUniqueTags();
 
-    currentLastTagPosition += direction * 6;
+    currentFirstTagPosition += direction * 6;
 
-    if (currentLastTagPosition < 0) {
-        currentLastTagPosition = 0;
-    } else if (currentLastTagPosition > uniqueTags.length - 6) {
-        currentLastTagPosition = uniqueTags.length - 6;
+    if (currentFirstTagPosition < 0) {
+        currentFirstTagPosition = 0;
+    } else if (currentFirstTagPosition > uniqueTags.length - 6) {
+        currentFirstTagPosition = uniqueTags.length - 6;
     }
 
     renderTags();
@@ -77,4 +82,3 @@ function init() {
 }
 
 init();
-

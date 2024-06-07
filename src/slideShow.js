@@ -24,11 +24,14 @@ function plusSlides(n) {
 }
 
 document.addEventListener("keydown", function(event) {
-    if (event.key === "ArrowLeft") {
-        plusSlides(-1);
-    } else if (event.key === "ArrowRight") {
-        plusSlides(1);
+    if(isDialogOpen){
+        if (event.key === "ArrowLeft") {
+            plusSlides(-1);
+        } else if (event.key === "ArrowRight") {
+            plusSlides(1);
+        }
     }
+
 });
 
 

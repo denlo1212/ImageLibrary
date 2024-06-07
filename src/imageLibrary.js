@@ -1,80 +1,79 @@
 const path = require("path");
 const fs = require("fs");
 const Foto = require("./domain/foto");
-const ImageLibrary = (function () {
-    let instance;
 
-    function createInstance() {
-        return new class {
-            constructor() {
-                this.uniqueTags = new Set();
-                this.images = [];
-                this.filteredImages = [];
-                this.loadImages("D:\\homework")
-            }
+class ImageLibrary {
+    constructor() {
+        if (ImageLibrary.instance) {
+            return ImageLibrary.instance;
+        }
 
-            isImageFile(filePath) {
-                const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
-                const ext = path.extname(filePath).toLowerCase();
-                return imageExtensions.includes(ext);
-            }
+        this.uniqueTags = new Set();
+        this.backUpList = [];
+        this.images = [];
 
-            loadImages(directoryPath, parentTags = []) {
-                if (fs.existsSync(directoryPath) && fs.lstatSync(directoryPath).isDirectory()) {
-                    const files = fs.readdirSync(directoryPath);
-                    for (const file of files) {
-                        const filePath = path.join(directoryPath, file);
-                        if (fs.lstatSync(filePath).isDirectory()) {
-                            const newTags = [...parentTags, file];
-                            this.loadImages(filePath, newTags);
-                        } else if (fs.lstatSync(filePath).isFile() && this.isImageFile(filePath)) {
-                            const foto = new Foto(filePath, "placeholder", file, parentTags);
-                            this.images.push(foto);
-                            this.filteredImages.push(foto)
-                            parentTags.forEach(tag => this.uniqueTags.add(tag));
-                        }
+        // this.loadImages("C:\\Users\\denlo\\OneDrive\\Afbeeldingen\\foto's")
+        this.loadImages("D:\\homework");
+
+        ImageLibrary.instance = this;
+    }
+
+    isImageFile(filePath) {
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+        const ext = path.extname(filePath).toLowerCase();
+        return imageExtensions.includes(ext);
+    }
+
+    loadImages(directoryPath, parentTags = []) {
+        try {
+            if (fs.existsSync(directoryPath) && fs.lstatSync(directoryPath).isDirectory()) {
+                const files = fs.readdirSync(directoryPath);
+                for (const file of files) {
+                    const filePath = path.join(directoryPath, file);
+                    const fileStat = fs.lstatSync(filePath);
+
+                    if (fileStat.isDirectory()) {
+                        const newTags = [...parentTags, file];
+                        this.loadImages(filePath, newTags);
+                    } else if (fileStat.isFile() && this.isImageFile(filePath)) {
+                        const foto = new Foto(filePath, "placeholder", file, parentTags);
+                        this.backUpList.push(foto);
+                        this.images.push(foto);
+                        parentTags.forEach(tag => this.uniqueTags.add(tag));
                     }
-                } else {
-                    console.error("Directory does not exist or is not a directory: " + directoryPath);
                 }
+            } else {
+                console.error("Directory does not exist or is not a directory:", directoryPath);
             }
-
-            getAmountOfImages() {
-                return this.filteredImages.length;
-            }
-
-            getImages() {
-                return [...this.filteredImages];
-            }
-
-            filterImages(tags) {
-                this.filteredImages = [];
-                this.filteredImages = this.images.filter(image =>
-                    tags.every(filter => image.tags.includes(filter))
-                );
-            }
-
-
-            getUniqueTags() {
-                return Array.from([...this.uniqueTags]);
-            }
-
-            restoreDefault(){
-                this.filteredImages = [];
-                this.filteredImages = this.images
-            }
+        } catch (error) {
+            console.error("Error loading images:", error);
         }
     }
 
-    return {
-        getInstance: function () {
-            if (!instance) {
-                instance = createInstance();
-            }
-            return instance;
-        }
-    };
-})();
+    getAmountOfImages() {
+        return this.images.length;
+    }
 
+    getImages() {
+        return [...this.images];
+    }
 
-module.exports = ImageLibrary;
+    filterImages(tags) {
+        this.images = this.backUpList.filter(image =>
+            tags.every(filter => image.tags.includes(filter))
+        );
+    }
+
+    getUniqueTags() {
+        return Array.from(this.uniqueTags);
+    }
+
+    restoreDefault() {
+        this.images = [...this.backUpList];
+    }
+}
+
+const library = new ImageLibrary();
+// Object.freeze(library);
+
+module.exports = library;

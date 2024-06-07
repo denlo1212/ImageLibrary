@@ -1,20 +1,18 @@
 const { renderPagination } = require("./pagination");
-const ImageLibraryList = require("./imageLibrary");
+const libraryList= require("./imageLibrary");
 
 global.currentPage = 1;
+global.isDialogOpen = false;
 
 let imagesPerPage = 0;
-let isDialogOpen = false;
-const library = ImageLibraryList.getInstance();
 
 function renderImage(image, index) {
-
     const imageContainer = document.createElement('div');
     imageContainer.className = 'image-container';
 
     const ImageElement = document.createElement('img');
     ImageElement.id = image.name;
-    ImageElement.setAttribute("src",image.path)
+    ImageElement.setAttribute("src", image.path);
     ImageElement.alt = `${image.metadata}`;
     ImageElement.setAttribute('data-index', index);
 
@@ -24,38 +22,37 @@ function renderImage(image, index) {
         showDialog(image, index);
     });
 
-
     return imageContainer;
 }
 
 function showDialog(image, index) {
     const dialog = document.querySelector(".image-dialog");
     dialog.addEventListener("close", function() {
-        isDialogOpen = false;
+        global.isDialogOpen = false;
     });
 
     dialog.querySelector("#image-within-dialog").setAttribute("src", `${image.path}`);
     dialog.querySelector("#image-within-dialog").setAttribute("data-index", index);
     dialog.showModal();
-    isDialogOpen = true;
+    global.isDialogOpen = true;
 }
 
-document.addEventListener("keydown", function(event) {
-    console.log(isDialogOpen)
-    if (!isDialogOpen) {
-        const totalPages = Math.ceil(library.getAmountOfImages()/ imagesPerPage);
-        if (event.key === "ArrowLeft" && global.currentPage > 1) {
-            event.preventDefault();
-            global.currentPage--;
-            render();
-        } else if (event.key === "ArrowRight" && global.currentPage < totalPages) {
-            console.log("press")
-            event.preventDefault();
-            global.currentPage++;
-            render();
+function eventListeners(){
+    document.addEventListener("keydown", function(event) {
+        if (!global.isDialogOpen) {
+            const totalPages = Math.ceil(libraryList.getAmountOfImages() / imagesPerPage);
+            if (event.key === "ArrowLeft" && global.currentPage > 1) {
+                event.preventDefault();
+                global.currentPage--;
+                render();
+            } else if (event.key === "ArrowRight" && global.currentPage < totalPages) {
+                event.preventDefault();
+                global.currentPage++;
+                render();
+            }
         }
-    }
-});
+    });
+}
 
 function needsPageScroll() {
     return document.body.scrollHeight > window.innerHeight;
@@ -66,8 +63,8 @@ function calculateImagesPerPage() {
     imageContainer.innerHTML = '';
 
     let count = 0;
-    while (!needsPageScroll() && count < library.getAmountOfImages()) {
-        const imageElement = renderImage(library.getImages()[count], count);
+    while (!needsPageScroll() && count < libraryList.getAmountOfImages()) {
+        const imageElement = renderImage(libraryList.getImages()[count], count);
         imageContainer.appendChild(imageElement);
         count++;
     }
@@ -91,16 +88,15 @@ function render() {
     imageContainer.innerHTML = '';
 
     const startIndex = (global.currentPage - 1) * imagesPerPage;
-    const endIndex = Math.min(startIndex + imagesPerPage, library.getAmountOfImages());
-    const imagesToRender = library.getImages().slice(startIndex, endIndex);
-
+    const endIndex = Math.min(startIndex + imagesPerPage, libraryList.getAmountOfImages());
+    const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
     imagesToRender.forEach((image, index) => {
         const imageElement = renderImage(image, index);
         imageContainer.appendChild(imageElement);
     });
 
-    const totalPages = Math.ceil(library.getAmountOfImages() / imagesPerPage);
+    const totalPages = Math.ceil(libraryList.getAmountOfImages() / imagesPerPage);
     renderPagination(totalPages, global.currentPage, updatePage);
 }
 
@@ -111,9 +107,11 @@ function updatePage(newPage) {
 
 function init() {
     calculateImagesPerPage();
+    eventListeners();
     render();
 }
 
 init();
 
-module.exports = {render};
+
+window.render = render
