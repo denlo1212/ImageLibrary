@@ -1,5 +1,5 @@
 const path = require('path');
-const ImageSaver = require("./imageSaver");
+const ImageSaver = require("./imageHandling/imageSaver");
 
 const addImagesButton = document.getElementById("add-images-btn");
 const loadImagesButton = document.getElementById("load-images-btn");

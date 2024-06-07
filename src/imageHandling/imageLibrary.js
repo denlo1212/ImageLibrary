@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const Foto = require("./domain/foto");
+const Foto = require("../domain/foto");
 
 class ImageLibrary {
     constructor() {

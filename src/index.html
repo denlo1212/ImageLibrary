@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image Grid</title>
   <link rel="stylesheet" href="./index.css">
-  <script src="./imageList.js" defer></script>
-  <script src="./menu.js" defer></script>
+  <script src="renderGallery.js" defer></script>
+  <script src="saveImages.js" defer></script>
   <script src="./slideShow.js" defer></script>
   <script src="./tags.js" defer></script>
 </head>
@@ -50,11 +50,11 @@
   <button id="load-images-btn">load</button>
 </dialog>
 
-<dialog class="image-dialog" >
-  <!--    <a class="show" onclick="plusSlides(-1)"> show more</a>-->
+<div id="image-dialog" class="modal">
   <a class="prev">&#10094;</a>
   <img id="image-within-dialog" src="" alt="Image description" data-index="" >
   <a class="next">&#10095;</a>
-</dialog>
+</div>
+
 
 </html>

@@ -1,5 +1,5 @@
 const { renderPagination } = require("./pagination");
-const libraryList= require("./imageLibrary");
+const libraryList= require("./imageHandling/imageLibrary");
 
 global.currentPage = 1;
 global.isDialogOpen = false;
@@ -19,23 +19,48 @@ function renderImage(image, index) {
     imageContainer.appendChild(ImageElement);
 
     imageContainer.addEventListener("click", event => {
-        showDialog(image, index);
+        showModal(image, index);
     });
 
     return imageContainer;
 }
 
-function showDialog(image, index) {
-    const dialog = document.querySelector(".image-dialog");
-    dialog.addEventListener("close", function() {
-        global.isDialogOpen = false;
+function showModal(image, index) {
+    global.isDialogOpen = true
+    const modal = document.getElementById("image-dialog");
+    const imageElement = modal.querySelector("#image-within-dialog");
+
+    // Set image source and index
+    imageElement.setAttribute("src", image.path);
+    imageElement.setAttribute("data-index", index);
+
+    // Show the modal
+    modal.classList.add("show");
+
+    document.body.style.overflow = "hidden";
+
+
+    modal.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            closeModal();
+            global.isDialogOpen = false
+        }
     });
 
-    dialog.querySelector("#image-within-dialog").setAttribute("src", `${image.path}`);
-    dialog.querySelector("#image-within-dialog").setAttribute("data-index", index);
-    dialog.showModal();
-    global.isDialogOpen = true;
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            closeModal();
+            global.isDialogOpen = false
+        }
+    });
 }
+
+function closeModal() {
+    const modal = document.getElementById("image-dialog");
+    modal.classList.remove("show");
+    document.body.style.overflow = "";
+}
+
 
 function eventListeners(){
     document.addEventListener("keydown", function(event) {
@@ -92,7 +117,6 @@ function render() {
     const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
     console.table(imagesToRender)
-    console.log(imagesToRender)
 
     imagesToRender.forEach((image, index) => {
         const imageElement = renderImage(image, index);

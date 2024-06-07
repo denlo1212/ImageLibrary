@@ -1,4 +1,4 @@
-const libraryTags = require("./imageLibrary");
+const libraryTags = require("./imageHandling/imageLibrary");
 
 let activeTags = [];
 
@@ -9,12 +9,12 @@ function renderTags() {
     const uniqueTags = libraryTags.getUniqueTags();
 
     uniqueTags.forEach(tag => {
-        const label = document.createElement("label");
-        label.innerHTML = tag;
-
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.value = tag;
+
+        const label = document.createElement("label");
+        label.innerHTML = tag;
 
         if (activeTags.includes(tag)) {
             checkbox.checked = true;
@@ -26,6 +26,7 @@ function renderTags() {
         filterForm.appendChild(label);
     });
 }
+
 
 function filterImages(event, libraryTags) {
     const checkbox = event.target;
