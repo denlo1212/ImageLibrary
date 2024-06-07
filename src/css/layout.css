@@ -6,7 +6,6 @@ body {
     display: grid;
     grid-template-areas:
         "menu header"
-        "menu tags"
         "menu main"
         "menu footer";
     grid-template-columns: 1fr 10fr;
@@ -14,26 +13,22 @@ body {
     height: 100vh;
 }
 
-header {
+header{
     grid-area: header;
     padding: 20px;
-    text-align: center;
 }
 
 .menu {
     grid-area: menu;
-    position: fixed;
-}
-
-.filter-container {
-    grid-area: tags;
-    top: 40px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
+.menu > * {
+    margin-bottom: 10px;
+}
 
 
 main.gallery {
@@ -44,3 +39,14 @@ main.gallery {
     padding: 20px;
     justify-items: center;
 }
+
+footer {
+    grid-area: footer;
+    padding: 20px;
+    text-align: center;
+}
+
+label{
+    color: white;
+}
+

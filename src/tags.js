@@ -58,13 +58,6 @@ function init() {
             dropdownContent.classList.toggle("show");
         });
 
-        window.onclick = (event) => {
-            if (!event.target.matches('.dropdown-btn')) {
-                if (dropdownContent.classList.contains('show')) {
-                    dropdownContent.classList.remove('show');
-                }
-            }
-        };
     });
 }
 

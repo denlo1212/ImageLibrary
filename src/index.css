@@ -1,20 +1,9 @@
-
-@import url('css/dialog.css');
-@import url('css/footer.css');
-@import url('css/images.css');
-@import url('css/layout.css');
-@import url('css/search.css');
-@import url('css/filter.css');
-@import url('css/menu.css');
+@import url("./css/allFiles.css");
+@import url("./css/layout.css");
+@import url("./css/variables.css");
 
 
 
-
-:root{
-  --main-background-color: #1f1f1f;
-  --secondary-color: #3a3a3a;
-
-}
 
 
 

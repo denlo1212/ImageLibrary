@@ -14,21 +14,22 @@
 <body>
 <header>
   <input class="search-box" type="search" placeholder="Search...">
-  <button class="close-button">x</button>
+<!--  <button class="close-button">x</button>-->
 </header>
 
 <div class="menu">
   <button id="add-images-btn">
     add images
   </button>
-</div>
-
-<div class="filter-container">
-  <button class="dropdown-btn">Filter Tags</button>
-  <div class="dropdown-content">
-    <form id="filterForm"></form>
+  <div class="filter-container">
+    <button class="dropdown-btn">Filter Tags</button>
+    <div class="dropdown-content">
+      <form id="filterForm"></form>
+    </div>
   </div>
 </div>
+
+
 
 <!--will be filled up with images-->
 <main class="gallery">
@@ -49,7 +50,7 @@
   <button id="load-images-btn">load</button>
 </dialog>
 
-<dialog class="image-dialog">
+<dialog class="image-dialog" >
   <!--    <a class="show" onclick="plusSlides(-1)"> show more</a>-->
   <a class="prev">&#10094;</a>
   <img id="image-within-dialog" src="" alt="Image description" data-index="" >

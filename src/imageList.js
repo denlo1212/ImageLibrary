@@ -91,6 +91,9 @@ function render() {
     const endIndex = Math.min(startIndex + imagesPerPage, libraryList.getAmountOfImages());
     const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
+    console.table(imagesToRender)
+    console.log(imagesToRender)
+
     imagesToRender.forEach((image, index) => {
         const imageElement = renderImage(image, index);
         imageContainer.appendChild(imageElement);

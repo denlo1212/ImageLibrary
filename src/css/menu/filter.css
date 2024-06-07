@@ -1,7 +1,7 @@
 
 .filter-container {
-    /*position: relative;*/
-    /*display: inline-block;*/
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-btn {
@@ -10,15 +10,12 @@
 
 .dropdown-content {
     display: none;
-    background-color: var(--secondary-color);
+    background-color: rgba(0,0,0, 0.8);
+    position: absolute;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content form {
-    padding: 12px 16px;
-
+    top: 0;
+    left: 100%;
+    transform: translateX(10px);
 }
 
 .dropdown-content label {
@@ -35,4 +32,3 @@
 .show {
     display: block;
 }
-

@@ -1,11 +1,5 @@
 
 
-footer {
-    grid-area: footer;
-    padding: 20px;
-    text-align: center;
-}
-
 .pagination {
     display: inline-block;
 }
@@ -21,7 +15,7 @@ footer {
 }
 
 .pagination a.active {
-    background-color: #4CAF50;
+    background-color: var(--active);
     color: white;
     border: 1px solid #4CAF50;
 }
