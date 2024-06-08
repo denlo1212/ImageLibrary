@@ -12,8 +12,8 @@ class ImageLibrary {
         this.backUpList = [];
         this.images = [];
 
-        this.loadImages("C:\\Users\\denlo\\OneDrive\\Afbeeldingen\\foto's")
-        // this.loadImages("D:\\homework");
+        this.directoryPath = path.join(__dirname,"..","..", "images", "outputImages");
+        this.loadImages(this.directoryPath);
 
         ImageLibrary.instance = this;
     }
@@ -49,10 +49,10 @@ class ImageLibrary {
             console.error("Error loading images:", error);
         }
 
+        // sort method doesn't work on a set
         const sortedUniqueTags = Array.from(this.uniqueTags).sort();
-        this.uniqueTags.clear(); // Clear the set
+        this.uniqueTags.clear();
 
-        // Add sorted tags back to the set
         sortedUniqueTags.forEach(tag => this.uniqueTags.add(tag));
     }
 
@@ -76,6 +76,13 @@ class ImageLibrary {
 
     restoreDefault() {
         this.images = [...this.backUpList];
+    }
+
+    reloadImagesFromDirectory() {
+        this.backUpList = []
+        this.images = []
+        this.uniqueTags = new Set()
+        this.loadImages(this.directoryPath)
     }
 }
 

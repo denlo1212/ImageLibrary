@@ -1,23 +1,46 @@
 const { BrowserWindow, dialog } = require('electron');
+const ProgressBar = require('electron-progressbar');
 const ImageSaver = require("./imageHandling/imageSaver");
+const library = require("./imageHandling/imageLibrary");
 
-function openFileDialog() {
+async function openFileDialog() {
     const mainWindow = BrowserWindow.getFocusedWindow();
-    dialog.showOpenDialog(mainWindow, {
+    const result = await dialog.showOpenDialog(mainWindow, {
         properties: ['openDirectory', 'multiSelections']
-    }).then(result => {
-        if (!result.canceled && result.filePaths.length > 0) {
-            const destinationDirectoryPath = "D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\outputImages";
-
-            result.filePaths.forEach(directoryPath => {
-                ImageSaver.saveImages(directoryPath, destinationDirectoryPath);
-            });
-        } else {
-            console.log('No directory selected');
-        }
-    }).catch(err => {
-        console.error(err);
     });
+
+    if (!result.canceled && result.filePaths.length > 0) {
+        const destinationDirectoryPath = "D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\outputImages";
+        const totalDirectories = result.filePaths.length;
+        let processedDirectories = 0;
+
+        const progressBar = new ProgressBar({
+            text: 'Saving images...',
+            details: "initializing",
+            browserWindow: {
+                parent: mainWindow,
+                modal: true,
+            },
+            maxValue: totalDirectories,
+        });
+
+        for (const directoryPath of result.filePaths) {
+            try {
+                await ImageSaver.saveImages(directoryPath, destinationDirectoryPath);
+                processedDirectories += 1;
+                if (processedDirectories === totalDirectories) {
+                    progressBar.close();
+                    library.reloadImagesFromDirectory();
+                }
+            } catch (error) {
+                console.error('Error processing directory:', directoryPath, error);
+                progressBar.close();
+                break;
+            }
+        }
+    } else {
+        console.log('No directory selected');
+    }
 }
 
 module.exports = { openFileDialog };

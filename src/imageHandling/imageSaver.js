@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
 class ImageSaver {
@@ -8,55 +8,56 @@ class ImageSaver {
         return imageExtensions.includes(ext);
     }
 
-    static saveImages(sourceFilePath, destinationDirectoryPath) {
+    static async saveImages(sourceFilePath, destinationDirectoryPath) {
+
         const sourceDirectoryName = path.basename(sourceFilePath);
         const destinationPath = path.join(destinationDirectoryPath, sourceDirectoryName);
 
-        if (fs.existsSync(sourceFilePath) && this.isDirectoryNotEmpty(sourceFilePath)) {
-            if (!fs.existsSync(destinationPath)) {
-                fs.mkdirSync(destinationPath, { recursive: true });
-            }
+        try {
+            const stat = await fs.lstat(sourceFilePath);
+            if (stat.isDirectory() && await this.isDirectoryNotEmpty(sourceFilePath)) {
+                await fs.mkdir(destinationPath, { recursive: true });
 
-            if (fs.lstatSync(sourceFilePath).isDirectory()) {
-                const files = fs.readdirSync(sourceFilePath);
+                const files = await fs.readdir(sourceFilePath);
                 for (const file of files) {
                     const filePath = path.join(sourceFilePath, file);
                     const destFilePath = path.join(destinationPath, file);
-                    if (fs.lstatSync(filePath).isDirectory()) {
-                        this.saveImages(filePath, destFilePath);
-                    } else if (fs.lstatSync(filePath).isFile() && this.isImageFile(filePath)) {
+                    const fileStat = await fs.lstat(filePath);
+
+                    if (fileStat.isDirectory()) {
+                        await this.saveImages(filePath, destinationPath);
+                    } else if (fileStat.isFile() && this.isImageFile(filePath)) {
                         try {
-                            fs.copyFileSync(filePath, destFilePath);
+                            await fs.copyFile(filePath, destFilePath);
                         } catch (error) {
                             console.error("Error saving image:", error.message);
                         }
                     }
                 }
-            } else if (fs.lstatSync(sourceFilePath).isFile() && this.isImageFile(sourceFilePath)) {
+            } else if (stat.isFile() && this.isImageFile(sourceFilePath)) {
                 const destFilePath = path.join(destinationPath, path.basename(sourceFilePath));
                 try {
-                    fs.copyFileSync(sourceFilePath, destFilePath);
+                    await fs.copyFile(sourceFilePath, destFilePath);
                 } catch (error) {
                     console.error("Error saving image:", error.message);
                 }
+            } else {
+                console.error("Source does not exist or is empty:", sourceFilePath);
             }
-        } else {
-            console.error("Source does not exist or is empty:", sourceFilePath);
+        } catch (error) {
+            console.error("Error processing directory:", error.message);
         }
     }
 
-     static isDirectoryNotEmpty(directoryPath) {
+    static async isDirectoryNotEmpty(directoryPath) {
         try {
-            const files = fs.readdirSync(directoryPath);
-            console.log(files.length > 0)
+            const files = await fs.readdir(directoryPath);
             return files.length > 0;
         } catch (error) {
             console.error("Error checking directory:", error.message);
             return false;
         }
     }
-
-
 }
 
 module.exports = ImageSaver;

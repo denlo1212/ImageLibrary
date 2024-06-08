@@ -77,6 +77,7 @@ function eventListeners(){
             }
         }
     });
+
 }
 
 function needsPageScroll() {
@@ -104,11 +105,11 @@ function calculateImagesPerPage() {
     if (count < 10) {
         count = 10;
     }
-
     imagesPerPage = count;
 }
 
 function render() {
+
     const imageContainer = document.querySelector(".gallery");
     imageContainer.innerHTML = '';
 
@@ -140,5 +141,5 @@ function init() {
 
 init();
 
-
+// module.exports = render
 window.render = render

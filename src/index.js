@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, screen, dialog, ipcMain,  ipcRenderer} = require('electron');
 const path = require('node:path');
 const { openFileDialog } = require("./fileDialog");
 
@@ -18,11 +18,12 @@ const createWindow = () => {
       contextIsolation: false,
       enableRemoteModule: true
     },
+    icon: null
   });
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
+  mainWindow.setMenu(null);
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
@@ -51,6 +52,11 @@ app.on('window-all-closed', () => {
   }
 });
 
+
+
 ipcMain.on('open-file-dialog', () => {
   openFileDialog();
 });
+
+
+
