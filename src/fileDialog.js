@@ -1,7 +1,7 @@
 const { BrowserWindow, dialog } = require('electron');
 const ProgressBar = require('electron-progressbar');
-const ImageSaver = require("./imageHandling/imageSaver");
-const library = require("./imageHandling/imageLibrary");
+const ImageSaver = require("./javascript/imageHandling/imageSaver");
+const library = require("./javascript/imageHandling/imageLibrary");
 
 async function openFileDialog() {
     const mainWindow = BrowserWindow.getFocusedWindow();

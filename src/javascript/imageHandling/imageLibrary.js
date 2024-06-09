@@ -12,7 +12,7 @@ class ImageLibrary {
         this.backUpList = [];
         this.images = [];
 
-        this.directoryPath = path.join(__dirname,"..","..", "images", "outputImages");
+        this.directoryPath = path.join(__dirname,"..","..","..", "images", "outputImages");
         this.loadImages(this.directoryPath);
 
         ImageLibrary.instance = this;

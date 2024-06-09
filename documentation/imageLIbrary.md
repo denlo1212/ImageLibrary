@@ -13,7 +13,7 @@ this.backUpList = [];
 this.images = [];
 ```
 
-the list will be filled with the class [Foto.js](../src/domain/foto.js)
+the list will be filled with the class [Foto.js](../src/javascript/domain/foto.js)
 
 if you ever need to reset the <span style="color: lightblue">this.images </span> list there is a restoreDefault() method.
 which is why you are <span style="color:red;">NOT </span> allowed to modify the backUpList
