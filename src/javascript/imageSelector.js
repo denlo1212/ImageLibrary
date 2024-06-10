@@ -1,4 +1,5 @@
 
+
 document.addEventListener("DOMContentLoaded", () => {
     const toggleSelectBtn = document.querySelector(".toggle-select-button");
     const gallery = document.querySelector(".gallery");
@@ -67,6 +68,14 @@ function toggleSelection(darkLayer, checkBox) {
         checkBox.checked = true;
         darkLayer.style.display = 'block';
     }
+}
+
+function saveSelectedImages(){
+    const imageContainers = document.querySelectorAll('.image-container');
+    // imageContainers.forEach((container) => {
+    //     container.querySelector()
+    //
+    // }
 }
 
 

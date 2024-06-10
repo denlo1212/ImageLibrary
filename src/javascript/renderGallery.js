@@ -4,8 +4,9 @@ const { selectImages, toggle } = require('./imageSelector');
 
 global.currentPage = 1;
 global.isDialogOpen = false;
+global.imagesPerPage = 0;
 
-let imagesPerPage = 0;
+
 let lastClickedIndex = null;
 
 function renderImage(image, index) {
@@ -17,7 +18,6 @@ function renderImage(image, index) {
     ImageElement.setAttribute("src", image.path);
     ImageElement.alt = `${image.metadata}`;
     ImageElement.setAttribute('data-index', index);
-
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
     checkBox.style.display = 'none';
@@ -63,6 +63,7 @@ function showModal(image, index) {
     imageElement.setAttribute("src", image.path);
     imageElement.setAttribute("data-index", index);
 
+
     // Show the modal
     modal.classList.add("show");
 
@@ -93,7 +94,7 @@ function closeModal() {
 function eventListeners() {
     document.addEventListener("keydown", function(event) {
         if (!global.isDialogOpen) {
-            const totalPages = Math.ceil(libraryList.getAmountOfImages() / imagesPerPage);
+            const totalPages = Math.ceil(libraryList.getAmountOfImages() / global.imagesPerPage);
             if (event.key === "ArrowLeft" && global.currentPage > 1) {
                 event.preventDefault();
                 global.currentPage--;
@@ -132,25 +133,25 @@ function calculateImagesPerPage() {
     if (count < 10) {
         count = 10;
     }
-    imagesPerPage = count;
+    global.imagesPerPage = count;
 }
 
 function render() {
     const imageContainer = document.querySelector(".gallery");
     imageContainer.innerHTML = '';
 
-    const startIndex = (global.currentPage - 1) * imagesPerPage;
-    const endIndex = Math.min(startIndex + imagesPerPage, libraryList.getAmountOfImages());
+    const startIndex = (global.currentPage - 1) * global.imagesPerPage;
+    const endIndex = Math.min(startIndex + global.imagesPerPage, libraryList.getAmountOfImages());
     const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
-    console.table(imagesToRender);
-
     imagesToRender.forEach((image, index) => {
-        const imageElement = renderImage(image, index);
+        index++
+        const imageElement = renderImage(image, index + startIndex);
         imageContainer.appendChild(imageElement);
+
     });
 
-    const totalPages = Math.ceil(libraryList.getAmountOfImages() / imagesPerPage);
+    const totalPages = Math.ceil(libraryList.getAmountOfImages() / global.imagesPerPage);
     renderPagination(totalPages, global.currentPage, updatePage);
 }
 
