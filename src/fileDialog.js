@@ -2,6 +2,7 @@ const { BrowserWindow, dialog } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const ImageSaver = require("./javascript/imageHandling/imageSaver");
 const library = require("./javascript/imageHandling/imageLibrary");
+const path = require("node:path");
 
 async function openFileDialog() {
     const mainWindow = BrowserWindow.getFocusedWindow();
@@ -10,7 +11,7 @@ async function openFileDialog() {
     });
 
     if (!result.canceled && result.filePaths.length > 0) {
-        const destinationDirectoryPath = "D:\\SchoolProjects\\FunProjects\\ImageLibrary\\images\\outputImages";
+        const destinationDirectoryPath = path.join(__dirname, '..', 'images', 'outputImages');
         const totalDirectories = result.filePaths.length;
         let processedDirectories = 0;
 
