@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-random123';">
+
   <title>Image Grid</title>
-  <link rel="stylesheet" href="index.css">
-  <script src="renderGallery.js" defer></script>
-  <script src="slideShow.js" defer></script>
-  <script src="tags.js" defer></script>
+  <link rel="stylesheet" href="./index.css">
+  <script src="./renderGallery.js" defer></script>
+  <script src="./slideShow.js" defer></script>
+  <script src="./tags.js" defer></script>
+  <script src="./imageSelector.js"> </script>
 </head>
 
 <body>
@@ -15,7 +18,6 @@
 
 <header>
   <input class="search-box" type="search" placeholder="Search...">
-<!--  <button class="close-button">x</button>-->
 </header>
 
 <div class="menu">
@@ -24,17 +26,19 @@
     <a id="add-images-btn">add images</a>
   </div>
 
-  <div class="filter-container menu-item">
+  <div class="menu-item filter-container">
     <img src="../../images/icons/filter.svg" class="icon">
     <a class="dropdown-btn">Filter Tags</a>
     <div class="dropdown-content">
       <form id="filterForm"></form>
     </div>
   </div>
+
+  <div class="menu-item">
+    <img src="../../images/icons/media-image-list.svg" class="icon">
+    <a class="toggle-select-button">Select Images</a>
+  </div>
 </div>
-
-
-
 
 <!--will be filled up with images-->
 <main class="gallery">
@@ -62,7 +66,7 @@
 </div>
 
 
-<script>
+<script nonce="random123">
   const { ipcRenderer } = require('electron');
 
   document.getElementById("add-images-btn").addEventListener("click", function() {

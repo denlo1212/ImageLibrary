@@ -87,6 +87,5 @@ class ImageLibrary {
 }
 
 const library = new ImageLibrary();
-// Object.freeze(library);
 
 module.exports = library;

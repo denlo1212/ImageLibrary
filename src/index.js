@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, dialog, ipcMain,  ipcRenderer} = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const { openFileDialog } = require("./fileDialog");
 
@@ -10,8 +10,8 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 2560,
-    height: 1440,
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -21,9 +21,13 @@ const createWindow = () => {
     icon: null
   });
 
+  // Maximize the window
+  mainWindow.maximize();
+
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'javascript/index.html'));
   mainWindow.setMenu(null);
+
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
@@ -52,11 +56,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-
-
 ipcMain.on('open-file-dialog', () => {
   openFileDialog();
 });
-
-
-

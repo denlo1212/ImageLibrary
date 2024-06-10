@@ -20,3 +20,7 @@ a{
     padding: 10px;
     color: var(--gray);
 }
+
+a:hover{
+    cursor: pointer;
+}

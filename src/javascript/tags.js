@@ -1,3 +1,4 @@
+// script.js
 const libraryTags = require("./imageHandling/imageLibrary");
 
 let activeTags = [];
@@ -7,33 +8,31 @@ function renderTags() {
     filterForm.innerHTML = '';
 
     const uniqueTags = libraryTags.getUniqueTags();
-    let count = 0;
-    const dropdownContent = document.querySelector(".dropdown-content");
-    dropdownContent.classList.toggle("show");
 
-    while(!needsPageScroll() && count < uniqueTags.length) {
+    uniqueTags.forEach(tag => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.value = uniqueTags[count];
+        checkbox.value = tag;
 
         const label = document.createElement("label");
-        label.innerHTML = uniqueTags[count];
+        label.innerHTML = tag;
 
-        if (activeTags.includes(uniqueTags[count])) {
+        if (activeTags.includes(tag)) {
             checkbox.checked = true;
         }
+        const starIcon = document.createElement("span");
+        starIcon.className = "favorite-star";
+        starIcon.innerText = "☆"; // Display star icon as empty
 
         checkbox.addEventListener("change", (event) => filterImages(event, libraryTags));
+        starIcon.addEventListener("click", (event) => toggleFavorite(event, tag));
 
-        label.appendChild(checkbox);
+        label.insertBefore(starIcon,label.firstChild);
+        label.insertBefore(checkbox, label.firstChild);
+
         filterForm.appendChild(label);
-        count++
-    }
-
-    dropdownContent.classList.toggle("show");
+    });
 }
-
-
 
 function filterImages(event, libraryTags) {
     const checkbox = event.target;
@@ -55,8 +54,17 @@ function filterImages(event, libraryTags) {
     window.render();
 }
 
-function needsPageScroll() {
-    return document.body.scrollHeight > window.innerHeight;
+function toggleFavorite(event, tag) {
+    const starIcon = event.target;
+    const tagIndex = activeTags.indexOf(tag);
+
+    if (tagIndex !== -1) {
+        activeTags.splice(tagIndex, 1);
+        starIcon.innerText = "☆";
+    } else {
+        activeTags.push(tag);
+        starIcon.innerText = "★";
+    }
 }
 
 function init() {
@@ -69,75 +77,7 @@ function init() {
         dropdownBtn.addEventListener("click", () => {
             dropdownContent.classList.toggle("show");
         });
-
     });
 }
 
 init();
-
-
-// const libraryTags = require("./imageHandling/imageLibrary");
-//
-// let activeTags = [];
-//
-// function renderTags() {
-//     const filterForm = document.querySelector("#filterForm");
-//     filterForm.innerHTML = '';
-//
-//     const uniqueTags = libraryTags.getUniqueTags();
-//
-//     uniqueTags.forEach(tag => {
-//         const checkbox = document.createElement("input");
-//         checkbox.type = "checkbox";
-//         checkbox.value = tag;
-//
-//         const label = document.createElement("label");
-//         label.innerHTML = tag;
-//
-//         if (activeTags.includes(tag)) {
-//             checkbox.checked = true;
-//         }
-//
-//         checkbox.addEventListener("change", (event) => filterImages(event, libraryTags));
-//
-//         label.appendChild(checkbox);
-//         filterForm.appendChild(label);
-//     });
-// }
-//
-//
-// function filterImages(event, libraryTags) {
-//     const checkbox = event.target;
-//     const tagText = checkbox.value;
-//
-//     if (checkbox.checked) {
-//         activeTags.push(tagText);
-//     } else {
-//         activeTags = activeTags.filter(tag => tag !== tagText);
-//     }
-//
-//     if (activeTags.length === 0) {
-//         libraryTags.restoreDefault();
-//     } else {
-//         libraryTags.filterImages(activeTags);
-//     }
-//
-//     global.currentPage = 1;
-//     window.render();
-// }
-//
-// function init() {
-//     document.addEventListener("DOMContentLoaded", () => {
-//         renderTags();
-//
-//         const dropdownBtn = document.querySelector(".dropdown-btn");
-//         const dropdownContent = document.querySelector(".dropdown-content");
-//
-//         dropdownBtn.addEventListener("click", () => {
-//             dropdownContent.classList.toggle("show");
-//         });
-//
-//     });
-// }
-//
-// init();
