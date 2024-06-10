@@ -5,10 +5,6 @@
 
 }
 
-.dropdown-btn {
-    background-color: #3498db;
-}
-
 .dropdown-content {
     display: none;
     background-color: rgba(0,0,0, 0.8);
@@ -42,5 +38,6 @@ input[type="checkbox"] {
 .show {
     display: block;
 }
+
 
 

@@ -20,16 +20,17 @@ header{
 
 .menu {
     grid-area: menu;
-    align-items: center;
     display: flex;
     flex-direction: column;
+    align-items: center;         /* Align items horizontally (centered) */
     height: 100vh;
 }
 
-.menu > * {
-    margin-bottom: 10px;
+.menu-item {
+    display: flex;
+    align-items: center;         /* Center items vertically within the container */
+    margin-bottom: 10px;         /* Space between each menu item */
 }
-
 
 main.gallery {
     grid-area: main;
