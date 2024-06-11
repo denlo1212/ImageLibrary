@@ -1,11 +1,10 @@
 const { renderPagination } = require("./pagination");
 const libraryList = require("./imageHandling/imageLibrary");
-const { selectImages, toggle } = require('./imageSelector');
+const { selectImages, toggle, save} = require('./imageSelector');
 
 global.currentPage = 1;
 global.isDialogOpen = false;
 global.imagesPerPage = 0;
-
 
 let lastClickedIndex = null;
 
@@ -18,6 +17,7 @@ function renderImage(image, index) {
     ImageElement.setAttribute("src", image.path);
     ImageElement.alt = `${image.metadata}`;
     ImageElement.setAttribute('data-index', index);
+
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
     checkBox.style.display = 'none';
@@ -44,7 +44,6 @@ function renderImage(image, index) {
             showModal(image, index);
         }
 
-
         lastClickedIndex = index;
 
     });
@@ -59,12 +58,9 @@ function showModal(image, index) {
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
 
-    // Set image source and index
     imageElement.setAttribute("src", image.path);
     imageElement.setAttribute("data-index", index);
 
-
-    // Show the modal
     modal.classList.add("show");
 
     document.body.style.overflow = "hidden";
@@ -81,8 +77,6 @@ function showModal(image, index) {
         }
     });
 }
-
-
 
 function closeModal() {
     const modal = document.getElementById("image-dialog");
@@ -168,5 +162,4 @@ function init() {
 
 init();
 
-// module.exports = render
 window.render = render;

@@ -1,0 +1,56 @@
+#popup-menu {
+    background-color: var(--main-background-color);
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    color: var(--gray);
+}
+
+#tag-list-container {
+    display: flex; /* Display the lists next to each other */
+    gap: 20px; /* Add some gap between the lists */
+}
+
+#tag-add-list,
+#tag-remove-list {
+    flex: 1; /* Make both lists take up equal space */
+    overflow-y: auto; /* Allow each list to scroll vertically */
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: var(--secondary-color);
+    max-height: 200px; /* Example height, adjust as needed */
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag-container input[type="checkbox"],
+.tag-container label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.tag-container input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.tag-list label {
+    white-space: nowrap;
+    margin-right: 5px;
+}
+
+.tag-list input[type="checkbox"] {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}

@@ -6,6 +6,10 @@ input.search {
     /*background: url("../images/icons/search.svg") no-repeat 13px;*/
 }
 
+.actions-container{
+    display: none;
+
+}
 
 
 
