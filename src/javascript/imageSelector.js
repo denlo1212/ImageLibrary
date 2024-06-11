@@ -37,13 +37,15 @@ function selectImagesBetween(startIndex, endIndex) {
     const isChecked = firstCheckBox.checked;
 
     imageContainers.forEach((container, index) => {
-        if (index >= startIndexValue && index <= endIndexValue) {
+        if (index >= startIndexValue && index < endIndexValue) {
             const darkLayer = container.querySelector('.dark-layer');
             const checkBox = container.querySelector('.image-checkbox');
+
 
             if (isChecked) {
                 unselect(darkLayer, checkBox);
             } else {
+                console.log("idk")
                 select(darkLayer, checkBox);
             }
         }
@@ -51,13 +53,13 @@ function selectImagesBetween(startIndex, endIndex) {
 }
 
 function select(darkLayer,checkBox){
-    checkBox.checked = false;
-    darkLayer.style.display = 'none';
+    checkBox.checked = true;
+    darkLayer.style.display = 'block';
 }
 
 function unselect(darkLayer,checkBox){
-    checkBox.checked = true;
-    darkLayer.style.display = 'block';
+    checkBox.checked = false;
+    darkLayer.style.display = 'none';
 }
 
 function toggleSelection(darkLayer, checkBox) {
