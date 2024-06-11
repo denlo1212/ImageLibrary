@@ -1,3 +1,4 @@
+const librarySelect = require("./imageHandling/imageLibrary");
 let selectedImages = [];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,43 +30,49 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function selectImagesBetween(startIndex, endIndex) {
-    const startIndexValue = Math.min(startIndex, endIndex);
-    const endIndexValue = Math.max(startIndex, endIndex);
+
+    const startIndexModified = startIndex + 1 - ((global.currentPage - 1)   * global.imagesPerPage);
+    const endIndexModified = endIndex + 1 - ((global.currentPage - 1) * global.imagesPerPage);
 
     const imageContainers = document.querySelectorAll('.image-container');
-    const firstCheckBox = imageContainers[startIndexValue].querySelector('.image-checkbox');
-    const firstDarkLayer = imageContainers[startIndexValue].querySelector('.dark-layer');
+    const firstCheckBox = imageContainers[startIndexModified].querySelector('.image-checkbox');
+    const firstDarkLayer = imageContainers[startIndexModified].querySelector('.dark-layer');
     const isChecked = firstCheckBox.checked;
 
     imageContainers.forEach((container, index) => {
-        if (index >= startIndexValue && index <= endIndexValue) {
+
+        if (index >= startIndexModified && index <= endIndexModified) {
             const darkLayer = container.querySelector('.dark-layer');
             const checkBox = container.querySelector('.image-checkbox');
 
             if (isChecked) {
-                unselect(darkLayer, checkBox);
+                unselect(darkLayer, checkBox, startIndex + index);
             } else {
-                select(darkLayer, checkBox);
+                select(darkLayer, checkBox, startIndex + index);
             }
         }
     });
 }
 
-function select(darkLayer, checkBox) {
+function select(darkLayer, checkBox, originalIndex) {
+    librarySelect.addSelectedImage(originalIndex )
     checkBox.checked = true;
     darkLayer.style.display = 'block';
 }
 
-function unselect(darkLayer, checkBox) {
+function unselect(darkLayer, checkBox, originalIndex) {
+    librarySelect.removeSelectedImage(originalIndex)
     checkBox.checked = false;
     darkLayer.style.display = 'none';
 }
 
-function toggleSelection(darkLayer, checkBox) {
+function toggleSelection(darkLayer, checkBox, index) {
     if (checkBox.checked) {
+        librarySelect.removeSelectedImage(index)
         checkBox.checked = false;
         darkLayer.style.display = 'none';
     } else {
+        librarySelect.addSelectedImage(index)
         checkBox.checked = true;
         darkLayer.style.display = 'block';
     }

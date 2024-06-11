@@ -11,6 +11,7 @@ class ImageLibrary {
         this.uniqueTags = new Set();
         this.backUpList = [];
         this.images = [];
+        this.selectedImages = new Set();
 
         this.directoryPath = path.join(__dirname,"..","..","..", "images", "outputImages");
         this.loadImages(this.directoryPath);
@@ -65,6 +66,7 @@ class ImageLibrary {
     }
 
     filterImages(tags) {
+        this.selectedImages = new Set();
         this.images = this.backUpList.filter(image =>
             tags.every(filter => image.tags.includes(filter))
         );
@@ -75,6 +77,7 @@ class ImageLibrary {
     }
 
     restoreDefault() {
+        this.selectedImages = new Set();
         this.images = [...this.backUpList];
     }
 
@@ -82,7 +85,20 @@ class ImageLibrary {
         this.backUpList = []
         this.images = []
         this.uniqueTags = new Set()
+        this.selectedImages = new Set();
         this.loadImages(this.directoryPath)
+    }
+
+    addSelectedImage(index){
+        this.selectedImages.add(this.images[index])
+    }
+
+    removeSelectedImage(index){
+        this.selectedImages.delete(this.images[index]);
+    }
+
+    getSelectedImages() {
+        return [...this.selectedImages]
     }
 }
 

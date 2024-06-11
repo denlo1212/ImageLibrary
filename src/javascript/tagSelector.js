@@ -1,6 +1,10 @@
 const libraryTag = require("./imageHandling/imageLibrary");
 
 function openPopupMenu() {
+
+    document.querySelector(".gallery")
+
+
     const popupMenu = document.getElementById('popup-menu');
     popupMenu.style.display = 'block';
     global.isDialogOpen = true;
@@ -21,12 +25,24 @@ function loadTags() {
     addList.innerHTML = '';
     removeList.innerHTML = '';
 
+    const selectedImagesTags = new Set();
+
+    const selectedImages = libraryTag.getSelectedImages();
+    selectedImages.forEach(image => {
+        image.tags.forEach(tag => {
+            selectedImagesTags.add(tag);
+        });
+    });
+
+    // update the div
+    const selectedImagesCountSpan = document.getElementById('selected-images-count');
+    selectedImagesCountSpan.textContent = selectedImages.length;
+    console.table(selectedImages)
+
+
     tagList.forEach(tag => {
         const addTagContainer = document.createElement('div');
         addTagContainer.classList.add('tag-container');
-
-        const removeTagContainer = document.createElement('div');
-        removeTagContainer.classList.add('tag-container');
 
         const addCheckbox = document.createElement('input');
         addCheckbox.type = 'checkbox';
@@ -36,6 +52,18 @@ function loadTags() {
         addLabel.htmlFor = 'add-' + tag;
         addLabel.appendChild(document.createTextNode(tag));
 
+        addTagContainer.appendChild(addCheckbox);
+        addTagContainer.appendChild(addLabel);
+
+        addList.appendChild(addTagContainer);
+
+    });
+
+    selectedImagesTags.forEach(tag =>{
+        const removeTagContainer = document.createElement('div');
+        removeTagContainer.classList.add('tag-container');
+
+
         const removeCheckbox = document.createElement('input');
         removeCheckbox.type = 'checkbox';
         removeCheckbox.id = 'remove-' + tag;
@@ -44,16 +72,11 @@ function loadTags() {
         removeLabel.htmlFor = 'remove-' + tag;
         removeLabel.appendChild(document.createTextNode(tag));
 
-
-        addTagContainer.appendChild(addCheckbox);
-        addTagContainer.appendChild(addLabel);
-
         removeTagContainer.appendChild(removeCheckbox);
         removeTagContainer.appendChild(removeLabel);
 
-        addList.appendChild(addTagContainer);
         removeList.appendChild(removeTagContainer);
-    });
+    })
 }
 
 

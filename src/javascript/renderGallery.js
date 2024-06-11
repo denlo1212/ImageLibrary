@@ -37,7 +37,7 @@ function renderImage(image, index) {
                 selectImages(lastClickedIndex, index ,darkLayer, checkBox);
             }
             else{
-                toggle(darkLayer, checkBox);
+                toggle(darkLayer, checkBox, index);
             }
         }
         else{
@@ -139,7 +139,6 @@ function render() {
     const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
     imagesToRender.forEach((image, index) => {
-        index++
         const imageElement = renderImage(image, index + startIndex);
         imageContainer.appendChild(imageElement);
 

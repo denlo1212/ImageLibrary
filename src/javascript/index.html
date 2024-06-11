@@ -20,7 +20,6 @@
 <header>
   <input class="search-box" type="search" placeholder="Search...">
   <div  class="actions-container">
-<!--    i want it here!-->
     <button class="tags-button">+</button>
 
   </div>
@@ -73,14 +72,17 @@
 </div>
 
 <div id="popup-menu" class="popup-menu">
+  <p id="total-images-selected">Total images selected: <span id="selected-images-count">0</span></p>
+
   <h3>Select Tags</h3>
+  <div id="list-headers-container">
+    <h4> All tags</h4>
+    <h4> Selected Images tags</h4>
+  </div>
   <div id="tag-list-container">
     <ul id="tag-add-list"></ul>
     <ul id="tag-remove-list"></ul>
   </div>
-
-<!--  <button onclick="applyTags()">Apply</button>-->
-<!--  <button onclick="closePopupMenu()">Close</button>-->
 </div>
 
 <script nonce="random123">

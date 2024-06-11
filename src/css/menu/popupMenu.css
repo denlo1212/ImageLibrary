@@ -12,21 +12,29 @@
     max-height: 80%;
     overflow: auto;
     color: var(--gray);
+    z-index: 1;
+
 }
 
 #tag-list-container {
-    display: flex; /* Display the lists next to each other */
-    gap: 20px; /* Add some gap between the lists */
+    display: flex;
+    gap: 20px;
+}
+
+#list-headers-container{
+    padding-left: 50px;
+    display: flex;
+    gap: 150px;
 }
 
 #tag-add-list,
 #tag-remove-list {
-    flex: 1; /* Make both lists take up equal space */
-    overflow-y: auto; /* Allow each list to scroll vertically */
+    flex: 1;
+    overflow-y: auto;
     padding: 10px;
     border: 1px solid #ccc;
     background-color: var(--secondary-color);
-    max-height: 200px; /* Example height, adjust as needed */
+    max-height: 200px;
 }
 
 .tag-container {
