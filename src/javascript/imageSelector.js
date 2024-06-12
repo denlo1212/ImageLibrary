@@ -20,12 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const imageContainers = gallery.querySelectorAll(".image-container");
         imageContainers.forEach(container => {
             const checkbox = container.querySelector(".image-checkbox");
+            const darkLayer = container.querySelector(".dark-layer")
             if (enable) {
                 checkbox.style.display = "block";
                 actionsContainer.style.display = "block";
             } else {
+                librarySelect.resetSelectedList()
                 checkbox.style.display = "none";
                 checkbox.checked = false;
+                darkLayer.style.display = "none"
                 actionsContainer.style.display = "none";
             }
         });

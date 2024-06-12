@@ -29,7 +29,8 @@ function renderImage(image, index) {
     }
 
     else{
-        if (libraryList.hasOwnProperty(index)) {
+        if (libraryList.getSelectedImagesMap().has(index)) {
+            console.log("check")
             checkBox.checked = true;
             darkLayer.style.display = "block"
         }

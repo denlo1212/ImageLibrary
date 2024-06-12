@@ -25,7 +25,7 @@ function loadTags() {
     const selectedImagesTags = new Set();
 
     const selectedImages = libraryTag.getSelectedImages();
-    selectedImages.forEach(image => {
+    selectedImages.map(image => {
         image.tags.forEach(tag => {
             selectedImagesTags.add(tag);
         });
@@ -75,12 +75,17 @@ function initializeEventListeners() {
     const popupMenu = document.getElementById('popup-menu');
     const button = document.querySelector(".tags-button");
 
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (event) {
+        event.stopPropagation(); // Prevent the click event from propagating to the document
         openPopupMenu();
     });
 
     popupMenu.addEventListener("click", function (event) {
-        if (event.target === popupMenu) {
+        event.stopPropagation(); // Prevent the click event from propagating to the document
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!popupMenu.contains(event.target)) {
             closePopupMenu();
         }
     });
@@ -91,6 +96,8 @@ function initializeEventListeners() {
         }
     });
 }
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     initializeEventListeners();

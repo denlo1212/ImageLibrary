@@ -62,3 +62,8 @@
     margin-right: 5px;
     margin-bottom: 5px;
 }
+
+#tags-buttons-container button{
+    margin-left: 20px;
+    margin-right: 110px
+}

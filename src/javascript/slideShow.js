@@ -12,6 +12,7 @@ function plusSlides(n) {
     const maxIndex = library.getAmountOfImages() - 1;
 
     currentImageIndex += n;
+    console.log(currentImageIndex)
 
     if (currentImageIndex < 0) {
         currentImageIndex = 0; // Prevent going before index 0
@@ -35,6 +36,7 @@ function plusSlides(n) {
 
 document.addEventListener("keydown", function(event) {
     const state = appStateSlide.getState();
+    console.log(state.isDialogOpen)
     if (state.isDialogOpen) {
         if (event.key === "ArrowLeft") {
             plusSlides(-1);
