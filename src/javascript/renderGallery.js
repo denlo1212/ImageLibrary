@@ -1,10 +1,7 @@
-const { renderPagination } = require("./pagination");
+const {renderPagination} = require("./pagination");
 const libraryList = require("./imageHandling/imageLibrary");
-const { selectImages, toggle, save} = require('./imageSelector');
-
-global.currentPage = 1;
-global.isDialogOpen = false;
-global.imagesPerPage = 0;
+const {selectImages, toggle} = require('./imageSelector');
+const appStateRender = require('./domain/appState');  // Importing the AppState instance
 
 let lastClickedIndex = null;
 
@@ -20,41 +17,47 @@ function renderImage(image, index) {
 
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
-    checkBox.style.display = 'none';
     checkBox.setAttribute('class', 'image-checkbox');
 
     const darkLayer = document.createElement('div');
     darkLayer.className = 'dark-layer';
-    darkLayer.style.display = 'none';
+    darkLayer.style.display = "none"
+
+    const state = appStateRender.getState();
+    if (!(state.selectionMode)) {
+        checkBox.style.display = "none";
+    }
+
+    else{
+        if (libraryList.hasOwnProperty(index)) {
+            checkBox.checked = true;
+            darkLayer.style.display = "block"
+        }
+    }
 
     imageContainer.appendChild(ImageElement);
     imageContainer.appendChild(checkBox);
     imageContainer.appendChild(darkLayer);
 
     imageContainer.addEventListener("click", event => {
-        if(checkBox.style.display === 'block'){
-            if(event.shiftKey && lastClickedIndex !== null){
-                selectImages(lastClickedIndex, index ,darkLayer, checkBox);
-            }
-            else{
+        if (state.selectionMode) {
+            if (event.shiftKey && lastClickedIndex !== null) {
+                selectImages(lastClickedIndex, index, darkLayer, checkBox);
+            } else {
                 toggle(darkLayer, checkBox, index);
             }
-        }
-        else{
+        } else {
             showModal(image, index);
         }
 
         lastClickedIndex = index;
-
     });
 
     return imageContainer;
 }
 
-
-
 function showModal(image, index) {
-    global.isDialogOpen = true;
+    appStateRender.updateState({isDialogOpen: true});
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
 
@@ -82,20 +85,21 @@ function closeModal() {
     const modal = document.getElementById("image-dialog");
     modal.classList.remove("show");
     document.body.style.overflow = "";
-    global.isDialogOpen = false;
+    appStateRender.updateState({isDialogOpen: false});
 }
 
 function eventListeners() {
-    document.addEventListener("keydown", function(event) {
-        if (!global.isDialogOpen) {
-            const totalPages = Math.ceil(libraryList.getAmountOfImages() / global.imagesPerPage);
-            if (event.key === "ArrowLeft" && global.currentPage > 1) {
+    document.addEventListener("keydown", function (event) {
+        const state = appStateRender.getState();
+        if (!state.isDialogOpen) {
+            const totalPages = Math.ceil(libraryList.getAmountOfImages() / state.imagesPerPage);
+            if (event.key === "ArrowLeft" && state.currentPage > 1) {
                 event.preventDefault();
-                global.currentPage--;
+                appStateRender.updateState({currentPage: state.currentPage - 1});
                 render();
-            } else if (event.key === "ArrowRight" && global.currentPage < totalPages) {
+            } else if (event.key === "ArrowRight" && state.currentPage < totalPages) {
                 event.preventDefault();
-                global.currentPage++;
+                appStateRender.updateState({currentPage: state.currentPage + 1});
                 render();
             }
         }
@@ -127,29 +131,29 @@ function calculateImagesPerPage() {
     if (count < 10) {
         count = 10;
     }
-    global.imagesPerPage = count;
+    appStateRender.updateState({imagesPerPage: count});
 }
 
 function render() {
+    const state = appStateRender.getState();
     const imageContainer = document.querySelector(".gallery");
     imageContainer.innerHTML = '';
 
-    const startIndex = (global.currentPage - 1) * global.imagesPerPage;
-    const endIndex = Math.min(startIndex + global.imagesPerPage, libraryList.getAmountOfImages());
+    const startIndex = (state.currentPage - 1) * state.imagesPerPage;
+    const endIndex = Math.min(startIndex + state.imagesPerPage, libraryList.getAmountOfImages());
     const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
     imagesToRender.forEach((image, index) => {
         const imageElement = renderImage(image, index + startIndex);
         imageContainer.appendChild(imageElement);
-
     });
 
-    const totalPages = Math.ceil(libraryList.getAmountOfImages() / global.imagesPerPage);
-    renderPagination(totalPages, global.currentPage, updatePage);
+    const totalPages = Math.ceil(libraryList.getAmountOfImages() / state.imagesPerPage);
+    renderPagination(totalPages, state.currentPage, updatePage);
 }
 
 function updatePage(newPage) {
-    global.currentPage = newPage;
+    appStateRender.updateState({currentPage: newPage});
     render();
 }
 

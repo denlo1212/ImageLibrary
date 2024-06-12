@@ -1,5 +1,5 @@
-// script.js
 const libraryTags = require("./imageHandling/imageLibrary");
+const appStateTags = require('./domain/appState');
 
 let activeTags = [];
 
@@ -27,7 +27,7 @@ function renderTags() {
         checkbox.addEventListener("change", (event) => filterImages(event, libraryTags));
         starIcon.addEventListener("click", (event) => toggleFavorite(event, tag));
 
-        label.insertBefore(starIcon,label.firstChild);
+        label.insertBefore(starIcon, label.firstChild);
         label.insertBefore(checkbox, label.firstChild);
 
         filterForm.appendChild(label);
@@ -50,7 +50,7 @@ function filterImages(event, libraryTags) {
         libraryTags.filterImages(activeTags);
     }
 
-    global.currentPage = 1;
+    appStateTags.updateState({ currentPage: 1 });
     window.render();
 }
 

@@ -1,14 +1,14 @@
 const library = require("./imageHandling/imageLibrary");
+const appStateSlide = require('./domain/AppState');  // Importing the AppState instance
 
 const nextButton = document.querySelector(".next");
 const prevButton = document.querySelector(".prev");
 
-let currentImageIndex = 0;
-
 function plusSlides(n) {
+    const state = appStateSlide.getState();
     const imageWithinDialog = document.getElementById("image-within-dialog");
-    currentImageIndex = parseInt(imageWithinDialog.getAttribute("data-index"));
-    const startingIndex = (global.currentPage - 1) * global.imagesPerPage;
+    let currentImageIndex = parseInt(imageWithinDialog.getAttribute("data-index"));
+    const startingIndex = (state.currentPage - 1) * state.imagesPerPage;
     const maxIndex = library.getAmountOfImages() - 1;
 
     currentImageIndex += n;
@@ -19,13 +19,13 @@ function plusSlides(n) {
         currentImageIndex = maxIndex; // Prevent going beyond maxImages
     }
 
-    if (currentImageIndex < startingIndex && global.currentPage > 1) {
-        global.currentPage--;
-        currentImageIndex = (global.currentPage - 1) * global.imagesPerPage + global.imagesPerPage - 1;
+    if (currentImageIndex < startingIndex && state.currentPage > 1) {
+        appStateSlide.updateState({ currentPage: state.currentPage - 1 });
+        currentImageIndex = (state.currentPage - 1) * state.imagesPerPage + state.imagesPerPage - 1;
         window.render();
-    } else if (currentImageIndex >= startingIndex + global.imagesPerPage && global.currentPage < Math.ceil(library.getImages().length / global.imagesPerPage)) {
-        global.currentPage++;
-        currentImageIndex = (global.currentPage - 1) * global.imagesPerPage;
+    } else if (currentImageIndex >= startingIndex + state.imagesPerPage && state.currentPage < Math.ceil(library.getImages().length / state.imagesPerPage)) {
+        appStateSlide.updateState({ currentPage: state.currentPage + 1 });
+        currentImageIndex = (state.currentPage - 1) * state.imagesPerPage;
         window.render();
     }
 
@@ -33,11 +33,9 @@ function plusSlides(n) {
     imageWithinDialog.setAttribute("data-index", currentImageIndex);
 }
 
-
-
-
 document.addEventListener("keydown", function(event) {
-    if (isDialogOpen) {
+    const state = appStateSlide.getState();
+    if (state.isDialogOpen) {
         if (event.key === "ArrowLeft") {
             plusSlides(-1);
         } else if (event.key === "ArrowRight") {

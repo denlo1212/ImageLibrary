@@ -1,20 +1,17 @@
 const libraryTag = require("./imageHandling/imageLibrary");
+const appStateTag = require('./domain/appState');
 
 function openPopupMenu() {
-
-    document.querySelector(".gallery")
-
-
     const popupMenu = document.getElementById('popup-menu');
     popupMenu.style.display = 'block';
-    global.isDialogOpen = true;
+    appStateTag.updateState({ isDialogOpen: true });
     loadTags();
 }
 
 function closePopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
     popupMenu.style.display = 'none';
-    global.isDialogOpen = false;
+    appStateTag.updateState({ isDialogOpen: false });
 }
 
 function loadTags() {
@@ -34,11 +31,8 @@ function loadTags() {
         });
     });
 
-    // update the div
     const selectedImagesCountSpan = document.getElementById('selected-images-count');
     selectedImagesCountSpan.textContent = selectedImages.length;
-    console.table(selectedImages)
-
 
     tagList.forEach(tag => {
         const addTagContainer = document.createElement('div');
@@ -56,13 +50,11 @@ function loadTags() {
         addTagContainer.appendChild(addLabel);
 
         addList.appendChild(addTagContainer);
-
     });
 
-    selectedImagesTags.forEach(tag =>{
+    selectedImagesTags.forEach(tag => {
         const removeTagContainer = document.createElement('div');
         removeTagContainer.classList.add('tag-container');
-
 
         const removeCheckbox = document.createElement('input');
         removeCheckbox.type = 'checkbox';
@@ -79,16 +71,13 @@ function loadTags() {
     })
 }
 
-
 function initializeEventListeners() {
     const popupMenu = document.getElementById('popup-menu');
-
-    var button = document.querySelector(".tags-button");
+    const button = document.querySelector(".tags-button");
 
     button.addEventListener("click", function () {
         openPopupMenu();
     });
-
 
     popupMenu.addEventListener("click", function (event) {
         if (event.target === popupMenu) {
@@ -106,4 +95,3 @@ function initializeEventListeners() {
 document.addEventListener("DOMContentLoaded", function () {
     initializeEventListeners();
 });
-

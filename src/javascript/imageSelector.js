@@ -1,4 +1,5 @@
 const librarySelect = require("./imageHandling/imageLibrary");
+const appState = require('./domain/appState');  // Importing the AppState instance
 let selectedImages = [];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -6,10 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const gallery = document.querySelector(".gallery");
     const actionsContainer = document.querySelector(".actions-container");
 
-    let selectionMode = false;
+    const state = appState.getState();
+    let selectionMode = state.selectionMode;
 
     toggleSelectBtn.addEventListener("click", () => {
         selectionMode = !selectionMode;
+        appState.updateState({ selectionMode });
         toggleSelectionMode(selectionMode);
     });
 
@@ -30,9 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function selectImagesBetween(startIndex, endIndex) {
+    const state = appState.getState();
+    const currentPage = state.currentPage;
+    const imagesPerPage = state.imagesPerPage;
 
-    const startIndexModified = startIndex + 1 - ((global.currentPage - 1)   * global.imagesPerPage);
-    const endIndexModified = endIndex + 1 - ((global.currentPage - 1) * global.imagesPerPage);
+    const startIndexModified = startIndex + 1 - ((currentPage - 1) * imagesPerPage);
+    const endIndexModified = endIndex + 1 - ((currentPage - 1) * imagesPerPage);
 
     const imageContainers = document.querySelectorAll('.image-container');
     const firstCheckBox = imageContainers[startIndexModified].querySelector('.image-checkbox');
@@ -40,8 +46,7 @@ function selectImagesBetween(startIndex, endIndex) {
     const isChecked = firstCheckBox.checked;
 
     imageContainers.forEach((container, index) => {
-
-        if (index >= startIndexModified && index <= endIndexModified) {
+        if (index >= startIndexModified && index < endIndexModified) {
             const darkLayer = container.querySelector('.dark-layer');
             const checkBox = container.querySelector('.image-checkbox');
 
@@ -55,55 +60,31 @@ function selectImagesBetween(startIndex, endIndex) {
 }
 
 function select(darkLayer, checkBox, originalIndex) {
-    librarySelect.addSelectedImage(originalIndex )
+    librarySelect.addSelectedImage(originalIndex);
     checkBox.checked = true;
     darkLayer.style.display = 'block';
 }
 
 function unselect(darkLayer, checkBox, originalIndex) {
-    librarySelect.removeSelectedImage(originalIndex)
+    librarySelect.removeSelectedImage(originalIndex);
     checkBox.checked = false;
     darkLayer.style.display = 'none';
 }
 
 function toggleSelection(darkLayer, checkBox, index) {
     if (checkBox.checked) {
-        librarySelect.removeSelectedImage(index)
+        librarySelect.removeSelectedImage(index);
         checkBox.checked = false;
         darkLayer.style.display = 'none';
     } else {
-        librarySelect.addSelectedImage(index)
+        librarySelect.addSelectedImage(index);
         checkBox.checked = true;
         darkLayer.style.display = 'block';
     }
 }
 
-function saveSelectedImages() {
-    const imageContainers = document.querySelectorAll('.image-container');
-    selectedImages = [];
-    imageContainers.forEach(container => {
-        const checkBox = container.querySelector('.image-checkbox');
-        if (checkBox.checked) {
-            selectedImages.push(container.getAttribute('data-index'));
-        }
-    });
-    console.table(selectedImages);
-}
-
-function deleteSelectedImages() {
-    const imageContainers = document.querySelectorAll('.image-container');
-    imageContainers.forEach(container => {
-        const checkBox = container.querySelector('.image-checkbox');
-        if (checkBox.checked) {
-            container.remove();
-        }
-    });
-    selectedImages = [];
-    console.log('Selected images deleted');
-}
 
 module.exports = {
     selectImages: selectImagesBetween,
-    toggle: toggleSelection,
-    save: saveSelectedImages
+    toggle: toggleSelection
 };

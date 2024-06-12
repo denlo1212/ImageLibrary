@@ -11,7 +11,7 @@ class ImageLibrary {
         this.uniqueTags = new Set();
         this.backUpList = [];
         this.images = [];
-        this.selectedImages = new Set();
+        this.selectedImages = {};
 
         this.directoryPath = path.join(__dirname,"..","..","..", "images", "outputImages");
         this.loadImages(this.directoryPath);
@@ -84,21 +84,23 @@ class ImageLibrary {
     reloadImagesFromDirectory() {
         this.backUpList = []
         this.images = []
-        this.uniqueTags = new Set()
-        this.selectedImages = new Set();
+        this.uniqueTags = new Set();
+        this.selectedImages = {};
         this.loadImages(this.directoryPath)
     }
 
     addSelectedImage(index){
-        this.selectedImages.add(this.images[index])
+        console.log(index)
+        this.selectedImages[index] = (this.images[index])
+        console.table(this.selectedImages)
     }
 
     removeSelectedImage(index){
-        this.selectedImages.delete(this.images[index]);
+        delete this.selectedImages[index]
     }
 
     getSelectedImages() {
-        return [...this.selectedImages]
+        return [...this.selectedImages.values()];
     }
 }
 
