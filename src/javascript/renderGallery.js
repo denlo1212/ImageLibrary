@@ -70,6 +70,7 @@ function showModal(image, index) {
     document.body.style.overflow = "hidden";
 
     modal.addEventListener("click", function (event) {
+        console.log("Clicked target:", event.target);
         if (event.target === modal) {
             closeModal();
         }

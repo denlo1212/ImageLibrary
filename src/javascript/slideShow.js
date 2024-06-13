@@ -12,7 +12,6 @@ function plusSlides(n) {
     const maxIndex = library.getAmountOfImages() - 1;
 
     currentImageIndex += n;
-    console.log(currentImageIndex)
 
     if (currentImageIndex < 0) {
         currentImageIndex = 0; // Prevent going before index 0

@@ -100,5 +100,5 @@ function initializeEventListeners() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    initializeEventListeners();
+    // initializeEventListeners();
 });
