@@ -1,14 +1,11 @@
 class AppState {
     constructor() {
-
         if (!AppState.instance) {
             this.state = {
                 currentPage: 1,
                 isDialogOpen: false,
                 imagesPerPage: 0,
                 selectionMode: false,
-                lastClickedIndex: null,
-                currentImageIndex: 0,
             };
             AppState.instance = this;
         }
@@ -17,38 +14,32 @@ class AppState {
     }
 
     getState() {
-        return { ...this.state };
-    }
 
-    updateState(updates) {
-        Object.assign(this.state, updates);
+        return { ...this.state };
     }
 
     setCurrentPage(page) {
         this.state.currentPage = page;
+        console.log('New currentPage:', this.state.currentPage);
     }
 
     setIsDialogOpen(isOpen) {
         this.state.isDialogOpen = isOpen;
+        console.log('New isDialogOpen:', this.state.isDialogOpen);
     }
 
     setImagesPerPage(count) {
         this.state.imagesPerPage = count;
+        console.log('New imagesPerPage:', this.state.imagesPerPage);
     }
 
     setSelectionMode(mode) {
         this.state.selectionMode = mode;
+        console.log('New selectionMode:', this.state.selectionMode);
     }
 
-    setLastClickedIndex(index) {
-        this.state.lastClickedIndex = index;
-    }
-
-    setCurrentImageIndex(index) {
-        this.state.currentImageIndex = index;
-    }
 }
 
 const instance = new AppState();
-
+Object.freeze(instance);
 module.exports = instance;

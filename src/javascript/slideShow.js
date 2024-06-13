@@ -1,5 +1,5 @@
 const library = require("./imageHandling/imageLibrary");
-const appStateSlide = require('./domain/AppState');  // Importing the AppState instance
+const appStateSlide = require('./domain/appState.js');  // Importing the AppState instance
 
 const nextButton = document.querySelector(".next");
 const prevButton = document.querySelector(".prev");
@@ -20,12 +20,13 @@ function plusSlides(n) {
     }
 
     if (currentImageIndex < startingIndex && state.currentPage > 1) {
-        appStateSlide.updateState({ currentPage: state.currentPage - 1 });
-        currentImageIndex = (state.currentPage - 1) * state.imagesPerPage + state.imagesPerPage - 1;
+        appStateSlide.setCurrentPage(state.currentPage - 1)
+        currentImageIndex = (state.currentPage - 2) * state.imagesPerPage + state.imagesPerPage - 1;
         window.render();
     } else if (currentImageIndex >= startingIndex + state.imagesPerPage && state.currentPage < Math.ceil(library.getImages().length / state.imagesPerPage)) {
-        appStateSlide.updateState({ currentPage: state.currentPage + 1 });
-        currentImageIndex = (state.currentPage - 1) * state.imagesPerPage;
+        // because your setting the currentpage you imidiatly use that index
+        appStateSlide.setCurrentPage(state.currentPage + 1)
+        currentImageIndex = (state.currentPage) * state.imagesPerPage;
         window.render();
     }
 
@@ -35,7 +36,6 @@ function plusSlides(n) {
 
 document.addEventListener("keydown", function(event) {
     const state = appStateSlide.getState();
-    console.log(state.isDialogOpen)
     if (state.isDialogOpen) {
         if (event.key === "ArrowLeft") {
             plusSlides(-1);

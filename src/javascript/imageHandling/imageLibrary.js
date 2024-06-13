@@ -91,7 +91,6 @@ class ImageLibrary {
 
     addSelectedImage(index) {
         this.selectedImages.set(index, this.images[index]);
-        console.table(this.selectedImages);
     }
 
     removeSelectedImage(index) {

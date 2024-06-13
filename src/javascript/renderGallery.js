@@ -1,7 +1,7 @@
 const {renderPagination} = require("./pagination");
 const libraryList = require("./imageHandling/imageLibrary");
 const {selectImages, toggle} = require('./imageSelector');
-const appStateRender = require('./domain/appState');  // Importing the AppState instance
+const appStateRender = require('./domain/appState.js');
 
 let lastClickedIndex = null;
 
@@ -30,7 +30,6 @@ function renderImage(image, index) {
 
     else{
         if (libraryList.getSelectedImagesMap().has(index)) {
-            console.log("check")
             checkBox.checked = true;
             darkLayer.style.display = "block"
         }
@@ -41,6 +40,7 @@ function renderImage(image, index) {
     imageContainer.appendChild(darkLayer);
 
     imageContainer.addEventListener("click", event => {
+        const state = appStateRender.getState();
         if (state.selectionMode) {
             if (event.shiftKey && lastClickedIndex !== null) {
                 selectImages(lastClickedIndex, index, darkLayer, checkBox);
@@ -58,7 +58,7 @@ function renderImage(image, index) {
 }
 
 function showModal(image, index) {
-    appStateRender.updateState({isDialogOpen: true});
+    appStateRender.setIsDialogOpen(true)
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
 
@@ -70,15 +70,21 @@ function showModal(image, index) {
     document.body.style.overflow = "hidden";
 
     modal.addEventListener("click", function (event) {
-        console.log("Clicked target:", event.target);
-        if (event.target === modal) {
-            closeModal();
+        const state = appStateRender.getState();
+        if(!state.selectionMode){
+            if (event.target === modal) {
+                closeModal();
+            }
         }
+
     });
 
     document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-            closeModal();
+        const state = appStateRender.getState();
+        if(!state.selectionMode){
+            if (event.key === "Escape") {
+                closeModal();
+            }
         }
     });
 }
@@ -87,7 +93,7 @@ function closeModal() {
     const modal = document.getElementById("image-dialog");
     modal.classList.remove("show");
     document.body.style.overflow = "";
-    appStateRender.updateState({isDialogOpen: false});
+    appStateRender.setIsDialogOpen(false);
 }
 
 function eventListeners() {
@@ -97,11 +103,11 @@ function eventListeners() {
             const totalPages = Math.ceil(libraryList.getAmountOfImages() / state.imagesPerPage);
             if (event.key === "ArrowLeft" && state.currentPage > 1) {
                 event.preventDefault();
-                appStateRender.updateState({currentPage: state.currentPage - 1});
+                appStateRender.setCurrentPage(state.currentPage - 1)
                 render();
             } else if (event.key === "ArrowRight" && state.currentPage < totalPages) {
                 event.preventDefault();
-                appStateRender.updateState({currentPage: state.currentPage + 1});
+                appStateRender.setCurrentPage(state.currentPage + 1)
                 render();
             }
         }
@@ -133,7 +139,7 @@ function calculateImagesPerPage() {
     if (count < 10) {
         count = 10;
     }
-    appStateRender.updateState({imagesPerPage: count});
+    appStateRender.setImagesPerPage(count)
 }
 
 function render() {
@@ -155,7 +161,7 @@ function render() {
 }
 
 function updatePage(newPage) {
-    appStateRender.updateState({currentPage: newPage});
+    appStateRender.setCurrentPage(newPage)
     render();
 }
 

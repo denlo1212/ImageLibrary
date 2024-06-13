@@ -4,14 +4,14 @@ const appStateTag = require('./domain/appState');
 function openPopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
     popupMenu.style.display = 'block';
-    appStateTag.updateState({ isDialogOpen: true });
+    appStateTag.setIsDialogOpen(true)
     loadTags();
 }
 
 function closePopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
     popupMenu.style.display = 'none';
-    appStateTag.updateState({ isDialogOpen: false });
+    appStateTag.setIsDialogOpen(false)
 }
 
 function loadTags() {
@@ -72,33 +72,27 @@ function loadTags() {
 }
 
 function initializeEventListeners() {
-    const popupMenu = document.getElementById('popup-menu');
     const button = document.querySelector(".tags-button");
 
     button.addEventListener("click", function (event) {
-        event.stopPropagation(); // Prevent the click event from propagating to the document
+        event.stopPropagation();
         openPopupMenu();
     });
 
-    popupMenu.addEventListener("click", function (event) {
-        event.stopPropagation(); // Prevent the click event from propagating to the document
-    });
-
-    document.addEventListener("click", function (event) {
-        if (!popupMenu.contains(event.target)) {
-            closePopupMenu();
-        }
-    });
 
     document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-            closePopupMenu();
+        const state = appStateTag.getState();
+        if (state.selectionMode) {
+            if (event.key === "Escape") {
+                closePopupMenu();
+            }
         }
+
     });
 }
 
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // initializeEventListeners();
+    initializeEventListeners();
 });

@@ -1,6 +1,6 @@
 const librarySelect = require("./imageHandling/imageLibrary");
 const appState = require('./domain/appState');  // Importing the AppState instance
-let selectedImages = [];
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const toggleSelectBtn = document.querySelector(".toggle-select-button");
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toggleSelectBtn.addEventListener("click", () => {
         selectionMode = !selectionMode;
-        appState.updateState({ selectionMode });
+        appState.setSelectionMode(selectionMode)
         toggleSelectionMode(selectionMode);
     });
 
@@ -85,6 +85,7 @@ function toggleSelection(darkLayer, checkBox, index) {
         darkLayer.style.display = 'block';
     }
 }
+
 
 
 module.exports = {
