@@ -4,9 +4,20 @@ const appStateTag = require('./domain/appState');
 function openPopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
     popupMenu.style.display = 'block';
-    appStateTag.setIsDialogOpen(true)
+    const button = document.querySelector("#change-tags-button");
+    appStateTag.setIsDialogOpen(true);
+
+    button.addEventListener("click", () => {
+        const { tagsToRemove, tagsToAdd } = getSelectedTags();
+        libraryTag.updateImageTags(tagsToRemove, tagsToAdd)
+        closePopupMenu()
+        appStateTag.setCurrentPage(1)
+        render()
+    });
+
     loadTags();
 }
+
 
 function closePopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
@@ -69,6 +80,28 @@ function loadTags() {
 
         removeList.appendChild(removeTagContainer);
     })
+}
+
+function getSelectedTags() {
+    const addList = document.querySelectorAll("#tag-add-list input[type='checkbox']");
+    const removeList = document.querySelectorAll("#tag-remove-list input[type='checkbox']");
+
+    const tagsToAdd = [];
+    const tagsToRemove = [];
+
+    addList.forEach(checkbox => {
+        if (checkbox.checked) {
+            tagsToAdd.push(checkbox.id.replace('add-', ''));
+        }
+    });
+
+    removeList.forEach(checkbox => {
+        if (checkbox.checked) {
+            tagsToRemove.push(checkbox.id.replace('remove-', ''));
+        }
+    });
+
+    return { tagsToRemove, tagsToAdd };
 }
 
 function initializeEventListeners() {

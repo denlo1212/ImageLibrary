@@ -49,8 +49,7 @@ function filterImages(event, libraryTags) {
     } else {
         libraryTags.filterImages(activeTags);
     }
-
-    appStateTags.updateState({ currentPage: 1 });
+    appStateTags.setCurrentPage(1)
     window.render();
 }
 
