@@ -36,7 +36,12 @@
     <img src="../../images/icons/filter.svg" class="icon">
     <a class="dropdown-btn">Filter Tags</a>
     <div class="dropdown-content">
-      <form id="filterForm"></form>
+      <form id="filterForm">
+        <div id="input-tag-container">
+          <input type="text" id="new-tag-input" placeholder="Enter new tag">
+          <button id="add-tag-button">Add Tag</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -60,11 +65,11 @@
 
 
 
-<dialog class="button-dialog">
-  <label for="directory-path">Submit:</label>
-  <input id="directory-path" type="file" webkitdirectory>
-  <button id="load-images-btn">load</button>
-</dialog>
+<!--<dialog class="button-dialog">-->
+<!--  <label for="directory-path">Submit:</label>-->
+<!--  <input id="directory-path" type="file" webkitdirectory>-->
+<!--  <button id="load-images-btn">load</button>-->
+<!--</dialog>-->
 
 <div id="image-dialog" class="modal">
   <a class="prev">&#10094;</a>

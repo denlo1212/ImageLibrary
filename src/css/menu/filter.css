@@ -33,7 +33,7 @@
     display: none;
     position: absolute;
     max-height: 500px;
-    min-width: 160px;
+    min-width: 500px;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;
@@ -65,5 +65,19 @@ input[type="checkbox"] {
     display: block;
 }
 
+#input-tag-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#new-tag-input {
+    height: 20px;
+
+}
+
+.favorite-star {
+    pointer-events: none;
+}
 
 

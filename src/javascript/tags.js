@@ -1,11 +1,17 @@
 const libraryTags = require("./imageHandling/imageLibrary");
 const appStateTags = require('./domain/appState');
 
+// Assuming libraryTags and appStateTags are correctly defined and imported
+
 let activeTags = [];
 
 function renderTags() {
     const filterForm = document.querySelector("#filterForm");
-    filterForm.innerHTML = '';
+
+    // Clear existing tags inside filterForm except input-tag-container
+    while (filterForm.children.length > 1) {
+        filterForm.removeChild(filterForm.lastChild);
+    }
 
     const uniqueTags = libraryTags.getUniqueTags();
 
@@ -20,9 +26,10 @@ function renderTags() {
         if (activeTags.includes(tag)) {
             checkbox.checked = true;
         }
+
         const starIcon = document.createElement("span");
         starIcon.className = "favorite-star";
-        starIcon.innerText = "☆"; // Display star icon as empty
+        starIcon.innerText = activeTags.includes(tag) ? "★" : "☆"; // Display star icon based on active state
 
         checkbox.addEventListener("change", (event) => filterImages(event, libraryTags));
         starIcon.addEventListener("click", (event) => toggleFavorite(event, tag));
@@ -32,6 +39,28 @@ function renderTags() {
 
         filterForm.appendChild(label);
     });
+
+    // Reattach event listener for adding new tag
+    const addTagButton = document.querySelector("#add-tag-button");
+    addTagButton.addEventListener("click", addNewTag);
+}
+
+
+
+function addNewTag(event) {
+    event.preventDefault();
+    const newTagInput = document.getElementById("new-tag-input");
+    const newTag = newTagInput.value.trim();
+
+    if (newTag && !libraryTags.getUniqueTags().includes(newTag)) {
+        libraryTags.addTag(newTag);
+        renderTags();
+        newTagInput.value = ''
+
+    } else {
+        alert("Tag already exists or is invalid.");
+        newTagInput.focus()
+    }
 }
 
 function filterImages(event, libraryTags) {
@@ -49,11 +78,14 @@ function filterImages(event, libraryTags) {
     } else {
         libraryTags.filterImages(activeTags);
     }
-    appStateTags.setCurrentPage(1)
+    appStateTags.setCurrentPage(1);
     window.render();
 }
 
 function toggleFavorite(event, tag) {
+    event.preventDefault();
+    event.stopPropagation();
+
     const starIcon = event.target;
     const tagIndex = activeTags.indexOf(tag);
 

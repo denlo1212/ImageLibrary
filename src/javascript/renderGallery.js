@@ -2,6 +2,7 @@ const {renderPagination} = require("./pagination");
 const libraryList = require("./imageHandling/imageLibrary");
 const {selectImages, toggle} = require('./imageSelector');
 const appStateRender = require('./domain/appState.js');
+const {setupZoom, setupDragAndModal} = require("./zoom");
 
 let lastClickedIndex = null;
 
@@ -57,37 +58,41 @@ function renderImage(image, index) {
     return imageContainer;
 }
 
+
 function showModal(image, index) {
-    appStateRender.setIsDialogOpen(true)
+    appStateRender.setIsDialogOpen(true);
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
 
+    // Setup initial image and index
     imageElement.setAttribute("src", image.path);
     imageElement.setAttribute("data-index", index);
 
+    // Show modal
     modal.classList.add("show");
-
     document.body.style.overflow = "hidden";
 
+    // Close modal on overlay click (if not in selection mode)
     modal.addEventListener("click", function (event) {
         const state = appStateRender.getState();
-        if(!state.selectionMode){
-            if (event.target === modal) {
-                closeModal();
-            }
+        if (!state.selectionMode && event.target === modal) {
+            closeModal();
         }
-
     });
 
+    // Close modal on Escape key press (if not in selection mode)
     document.addEventListener("keydown", function (event) {
         const state = appStateRender.getState();
-        if(!state.selectionMode){
-            if (event.key === "Escape") {
-                closeModal();
-            }
+        if (!state.selectionMode && event.key === "Escape") {
+            closeModal();
         }
     });
+
+    setupZoom(imageElement);
+    setupDragAndModal(modal);
 }
+
+
 
 function closeModal() {
     const modal = document.getElementById("image-dialog");
@@ -149,16 +154,21 @@ function render() {
 
     const startIndex = (state.currentPage - 1) * state.imagesPerPage;
     const endIndex = Math.min(startIndex + state.imagesPerPage, libraryList.getAmountOfImages());
-    const imagesToRender = libraryList.getImages().slice(startIndex, endIndex);
 
-    imagesToRender.forEach((image, index) => {
-        const imageElement = renderImage(image, index + startIndex);
+    const imagesMap = libraryList.getImagesMap();
+    const imagesArray = Array.from(imagesMap.entries());
+
+    const imagesToRender = imagesArray.slice(startIndex, endIndex);
+
+    imagesToRender.forEach(([index, image]) => {
+        const imageElement = renderImage(image, index);
         imageContainer.appendChild(imageElement);
     });
 
     const totalPages = Math.ceil(libraryList.getAmountOfImages() / state.imagesPerPage);
     renderPagination(totalPages, state.currentPage, updatePage);
 }
+
 
 function updatePage(newPage) {
     appStateRender.setCurrentPage(newPage)

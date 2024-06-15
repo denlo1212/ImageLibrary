@@ -8,30 +8,36 @@ function plusSlides(n) {
     const state = appStateSlide.getState();
     const imageWithinDialog = document.getElementById("image-within-dialog");
     let currentImageIndex = parseInt(imageWithinDialog.getAttribute("data-index"));
+    const imagesMap = library.getImagesMap();
+    const imagesArray = Array.from(imagesMap.entries());
     const startingIndex = (state.currentPage - 1) * state.imagesPerPage;
-    const maxIndex = library.getAmountOfImages() - 1;
+    const maxIndex = imagesArray.length - 1;
 
-    currentImageIndex += n;
+    // Find the current index in the array
+    let currentIndexInArray = imagesArray.findIndex(([index]) => index === currentImageIndex);
 
-    if (currentImageIndex < 0) {
-        currentImageIndex = 0; // Prevent going before index 0
-    } else if (currentImageIndex > maxIndex) {
-        currentImageIndex = maxIndex; // Prevent going beyond maxImages
+    currentIndexInArray += n;
+
+    if (currentIndexInArray < 0) {
+        currentIndexInArray = 0; // Prevent going before index 0
+    } else if (currentIndexInArray > maxIndex) {
+        currentIndexInArray = maxIndex; // Prevent going beyond maxImages
     }
 
-    if (currentImageIndex < startingIndex && state.currentPage > 1) {
-        appStateSlide.setCurrentPage(state.currentPage - 1)
-        currentImageIndex = (state.currentPage - 2) * state.imagesPerPage + state.imagesPerPage - 1;
+    currentImageIndex = imagesArray[currentIndexInArray][0]; // Update to the new image index
+
+    if (currentIndexInArray < startingIndex && state.currentPage > 1) {
+        appStateSlide.setCurrentPage(state.currentPage - 1);
+        currentIndexInArray = (state.currentPage - 2) * state.imagesPerPage + state.imagesPerPage - 1;
         window.render();
-    } else if (currentImageIndex >= startingIndex + state.imagesPerPage && state.currentPage < Math.ceil(library.getImages().length / state.imagesPerPage)) {
-        // because your setting the currentpage you imidiatly use that index
-        appStateSlide.setCurrentPage(state.currentPage + 1)
-        currentImageIndex = (state.currentPage) * state.imagesPerPage;
+    } else if (currentIndexInArray >= startingIndex + state.imagesPerPage && state.currentPage < Math.ceil(imagesArray.length / state.imagesPerPage)) {
+        appStateSlide.setCurrentPage(state.currentPage + 1);
+        currentIndexInArray = (state.currentPage) * state.imagesPerPage;
         window.render();
     }
 
-    imageWithinDialog.src = library.getImages()[currentImageIndex].path;
-    imageWithinDialog.setAttribute("data-index", currentImageIndex);
+    imageWithinDialog.src = imagesArray[currentIndexInArray][1].path; // Update the image source
+    imageWithinDialog.setAttribute("data-index", imagesArray[currentIndexInArray][0]); // Set the new data index
 }
 
 document.addEventListener("keydown", function(event) {

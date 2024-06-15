@@ -10,7 +10,7 @@ class ImageLibrary {
 
         this.uniqueTags = new Set();
         this.backUpList = [];
-        this.images = [];
+        this.images = new Map();
         this.selectedImages = new Map();
 
         this.directoryPath = path.join(__dirname,"..","..","..", "images", "outputImages");
@@ -25,12 +25,10 @@ class ImageLibrary {
         return imageExtensions.includes(ext);
     }
 
-
     loadImages(directoryPath, parentTags = []) {
         try {
             if (fs.existsSync(directoryPath) && fs.lstatSync(directoryPath).isDirectory()) {
                 const files = fs.readdirSync(directoryPath);
-                // let isEmpty = true;
 
                 for (const file of files) {
                     const filePath = path.join(directoryPath, file);
@@ -39,20 +37,14 @@ class ImageLibrary {
                     if (fileStat.isDirectory()) {
                         const newTags = [...parentTags, file];
                         this.loadImages(filePath, newTags);
-                        // isEmpty = false;
                     } else if (fileStat.isFile() && this.isImageFile(filePath)) {
                         const foto = new Foto(filePath, "placeholder", file, parentTags.map(tag => tag.toLowerCase()));
+                        const index = this.backUpList.length;
                         this.backUpList.push(foto);
-                        this.images.push(foto);
+                        this.images.set(index, foto);
                         parentTags.forEach(tag => this.uniqueTags.add(tag.toLowerCase()));
-                        // isEmpty = false;
                     }
                 }
-
-                // if (isEmpty) {
-                //     fs.rmdirSync(directoryPath); // Delete the directory if it's empty
-                //     console.log(`Deleted empty directory: ${directoryPath}`);
-                // }
             } else {
                 console.error("Directory does not exist or is not a directory:", directoryPath);
             }
@@ -60,48 +52,82 @@ class ImageLibrary {
             console.error("Error loading images:", error);
         }
 
-        // sort method doesn't work on a set
         const sortedUniqueTags = Array.from(this.uniqueTags).sort();
         this.uniqueTags.clear();
-
         sortedUniqueTags.forEach(tag => this.uniqueTags.add(tag));
     }
 
-
     getAmountOfImages() {
-        return this.images.length;
+        return this.images.size;
     }
 
     getImages() {
-        return [...this.images];
+        return Array.from(this.images.values());
+    }
+
+    getImagesMap() {
+        return new Map(this.images)
     }
 
     filterImages(tags) {
-        this.selectedImages = new Set();
-        this.images = this.backUpList.filter(image =>
-            tags.every(filter => image.tags.includes(filter))
-        );
+        this.selectedImages = new Map();
+        this.images.clear();
+        this.backUpList.forEach((image, index) => {
+            if (tags.every(filter => image.tags.includes(filter))) {
+                this.images.set(index, image);
+            }
+        });
     }
 
     getUniqueTags() {
         return Array.from(this.uniqueTags);
     }
 
+    addTag(tag) {
+        const normalizedTag = tag.toLowerCase(); // Ensure tag is in lowercase for consistency
+
+        if (!this.uniqueTags.has(normalizedTag)) {
+            this.uniqueTags.add(normalizedTag);
+
+            // Sort unique tags and reassign to maintain sorted order
+            const sortedUniqueTags = Array.from(this.uniqueTags).sort();
+            this.uniqueTags.clear();
+            sortedUniqueTags.forEach(tag => this.uniqueTags.add(tag));
+
+            // Create directory for the new tag
+            const tagDirectory = path.join(this.directoryPath, normalizedTag);
+
+            if (!fs.existsSync(tagDirectory)) {
+                fs.mkdirSync(tagDirectory);
+                console.log(`Created directory for tag '${normalizedTag}' at ${tagDirectory}`);
+            } else {
+                console.log(`Directory for tag '${normalizedTag}' already exists at ${tagDirectory}`);
+            }
+        } else {
+            console.log(`Tag '${normalizedTag}' already exists.`);
+        }
+    }
+
     restoreDefault() {
-        this.selectedImages = new Set();
-        this.images = [...this.backUpList];
+        this.selectedImages = new Map();
+        this.images.clear();
+        this.backUpList.forEach((image, index) => {
+            this.images.set(index, image);
+        });
     }
 
     reloadImagesFromDirectory() {
-        this.backUpList = []
-        this.images = []
+        this.backUpList = [];
+        this.images = new Map();
         this.uniqueTags = new Set();
         this.selectedImages = new Map();
-        this.loadImages(this.directoryPath)
+        this.loadImages(this.directoryPath);
     }
 
     addSelectedImage(index) {
-        this.selectedImages.set(index, this.images[index]);
+        if (this.images.has(index)) {
+            this.selectedImages.set(index, this.images.get(index));
+        }
     }
 
     removeSelectedImage(index) {
@@ -113,8 +139,7 @@ class ImageLibrary {
     }
 
     getSelectedImages() {
-        return [...this.selectedImages.values()]
-
+        return Array.from(this.selectedImages.values());
     }
 
     resetSelectedList() {
@@ -122,11 +147,9 @@ class ImageLibrary {
     }
 
     updateImageTags(tagsToRemove, tagsToAdd) {
-        const selectedImages = this.selectedImages;
         const baseDir = path.join(__dirname, '..', '..', '..', 'images', 'outputImages');
 
-        selectedImages.forEach((foto, index) => {
-
+        this.selectedImages.forEach((foto, index) => {
             tagsToAdd.forEach(tag => {
                 if (!foto.tags.includes(tag)) {
                     foto.tags.push(tag);
@@ -137,7 +160,6 @@ class ImageLibrary {
 
             const dirStructure = foto.tags.join(path.sep);
             const newPath = path.join(baseDir, dirStructure, path.basename(foto.path));
-
 
             this.moveImageFile(foto, newPath);
 
@@ -152,6 +174,7 @@ class ImageLibrary {
             this.resetSelectedList();
         });
     }
+
     moveImageFile(foto, newPath) {
         const oldPath = foto.path;
 
@@ -165,9 +188,6 @@ class ImageLibrary {
             console.error(`Image file not found at ${oldPath}`);
         }
     }
-
-
-
 }
 
 const library = new ImageLibrary();
