@@ -14,7 +14,6 @@ class AppState {
     }
 
     getState() {
-
         return { ...this.state };
     }
 

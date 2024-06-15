@@ -30,7 +30,7 @@ class ImageLibrary {
         try {
             if (fs.existsSync(directoryPath) && fs.lstatSync(directoryPath).isDirectory()) {
                 const files = fs.readdirSync(directoryPath);
-                let isEmpty = true;
+                // let isEmpty = true;
 
                 for (const file of files) {
                     const filePath = path.join(directoryPath, file);
@@ -39,20 +39,20 @@ class ImageLibrary {
                     if (fileStat.isDirectory()) {
                         const newTags = [...parentTags, file];
                         this.loadImages(filePath, newTags);
-                        isEmpty = false;
+                        // isEmpty = false;
                     } else if (fileStat.isFile() && this.isImageFile(filePath)) {
                         const foto = new Foto(filePath, "placeholder", file, parentTags.map(tag => tag.toLowerCase()));
                         this.backUpList.push(foto);
                         this.images.push(foto);
                         parentTags.forEach(tag => this.uniqueTags.add(tag.toLowerCase()));
-                        isEmpty = false;
+                        // isEmpty = false;
                     }
                 }
 
-                if (isEmpty) {
-                    fs.rmdirSync(directoryPath); // Delete the directory if it's empty
-                    console.log(`Deleted empty directory: ${directoryPath}`);
-                }
+                // if (isEmpty) {
+                //     fs.rmdirSync(directoryPath); // Delete the directory if it's empty
+                //     console.log(`Deleted empty directory: ${directoryPath}`);
+                // }
             } else {
                 console.error("Directory does not exist or is not a directory:", directoryPath);
             }
