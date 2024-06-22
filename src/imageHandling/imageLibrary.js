@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const Foto = require("../domain/foto");
+const Foto = require("./domain/foto");
 
 class ImageLibrary {
     constructor() {
@@ -13,7 +13,7 @@ class ImageLibrary {
         this.images = new Map();
         this.selectedImages = new Map();
 
-        this.directoryPath = path.join(__dirname,"..","..","..", "images", "outputImages");
+        this.directoryPath = path.join(__dirname,"..", "..", "images", "outputImages");
         this.loadImages(this.directoryPath);
 
         ImageLibrary.instance = this;

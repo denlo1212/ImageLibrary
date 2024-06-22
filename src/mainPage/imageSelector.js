@@ -1,5 +1,5 @@
-const librarySelect = require("./imageHandling/imageLibrary");
-const appState = require('./domain/appState');  // Importing the AppState instance
+const librarySelect = require("../imageHandling/imageLibrary");
+const appState = require('../imageHandling/domain/appState');  // Importing the AppState instance
 
 
 document.addEventListener("DOMContentLoaded", () => {
