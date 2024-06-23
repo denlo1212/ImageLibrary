@@ -1,15 +1,15 @@
-function setupZoom(modalElement) {
+function setupZoom(imageElement) {
     let zoomLevel = 100;
 
     const updateZoom = () => {
-        modalElement.style.transform = `scale(${zoomLevel / 100})`;
+        imageElement.style.transform = `scale(${zoomLevel / 100})`;
     };
 
-    modalElement.addEventListener("wheel", (event) => {
+    imageElement.addEventListener("wheel", (event) => {
         event.preventDefault();
         const zoomDelta = event.deltaY > 0 ? -20 : 20;
         zoomLevel += zoomDelta; // Adjust zoom level
-        zoomLevel = Math.max(100, Math.min(10000, zoomLevel));
+        zoomLevel = Math.max(100, Math.min(1000, zoomLevel));
         updateZoom();
     });
 

@@ -15,7 +15,7 @@ const createMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    frame: false,
+    // frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -52,6 +52,7 @@ const createSecondWindow = () => {
   secondWindow.maximize();
   secondWindow.loadFile(path.join(__dirname, 'slideShow/slideShow.html'));
   secondWindow.setMenu(null);
+
 
   secondWindow.webContents.on('before-input-event', (event, input) => {
     if (input.key === "Escape") {
