@@ -1,5 +1,5 @@
-const libraryTag = require("./imageHandling/imageLibrary");
-const appStateTag = require('./domain/appState');
+const libraryTag = require("../imageHandling/imageLibrary");
+const appStateTag = require('../imageHandling/domain/appState');
 
 function openPopupMenu() {
     const popupMenu = document.getElementById('popup-menu');

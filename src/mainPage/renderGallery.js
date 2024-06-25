@@ -1,7 +1,7 @@
 const {renderPagination} = require("./pagination");
-const libraryList = require("./imageHandling/imageLibrary");
+const libraryList = require("../imageHandling/imageLibrary");
 const {selectImages, toggle} = require('./imageSelector');
-const appStateRender = require('./domain/appState.js');
+const appStateRender = require('../imageHandling/domain/appState.js');
 const {setupZoom, setupDragAndModal} = require("./zoom");
 
 let lastClickedIndex = null;
@@ -70,7 +70,6 @@ function showModal(image, index) {
 
     // Show modal
     modal.classList.add("show");
-    document.body.style.overflow = "hidden";
 
     // Close modal on overlay click (if not in selection mode)
     modal.addEventListener("click", function (event) {

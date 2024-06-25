@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-random123';">
 
   <title>Image Grid</title>
-  <link rel="stylesheet" href="./index.css">
-  <script src="./renderGallery.js" defer></script>
-  <script src="./slideShow.js" defer></script>
-  <script src="./tags.js" defer></script>
-  <script src="./imageSelector.js"> </script>
-  <script src="./tagSelector.js"> </script>
+  <link rel="stylesheet" href="index.css">
+  <script src="renderGallery.js" defer></script>
+  <script src="slideShow.js" defer></script>
+  <script src="tags.js" defer></script>
+  <script src="imageSelector.js"> </script>
+  <script src="tagSelector.js"> </script>
 
 </head>
 
@@ -51,8 +51,8 @@
   </div>
 
   <div class="menu-item">
-    <img src="../../images/icons/media-image-list.svg" class="icon">
-    <a class="enable-slide-show">SlideShow</a>
+    <img src="../../images/icons/media-image-plus.svg" class="icon">
+    <a id="slide-show-button">slide show</a>
   </div>
 </div>
 
@@ -67,14 +67,6 @@
 
 </footer>
 </body>
-
-
-
-<!--<dialog class="button-dialog">-->
-<!--  <label for="directory-path">Submit:</label>-->
-<!--  <input id="directory-path" type="file" webkitdirectory>-->
-<!--  <button id="load-images-btn">load</button>-->
-<!--</dialog>-->
 
 <div id="image-dialog" class="modal">
   <a class="prev">&#10094;</a>
@@ -98,13 +90,4 @@
     <button id="change-tags-button"> change tags</button>
   </div>
 </div>
-
-<script nonce="random123">
-  const { ipcRenderer } = require('electron');
-
-  document.getElementById("add-images-btn").addEventListener("click", function() {
-    ipcRenderer.send('open-file-dialog');
-  });
-</script>
-
 </html>

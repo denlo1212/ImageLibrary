@@ -1,5 +1,5 @@
-const library = require("./imageHandling/imageLibrary");
-const appStateSlide = require('./domain/appState.js');
+const library = require("../imageHandling/imageLibrary");
+const appStateSlide = require('../imageHandling/domain/appState.js');
 
 const nextButton = document.querySelector(".next");
 const prevButton = document.querySelector(".prev");

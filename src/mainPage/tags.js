@@ -1,5 +1,5 @@
-const libraryTags = require("./imageHandling/imageLibrary");
-const appStateTags = require('./domain/appState');
+const libraryTags = require("../imageHandling/imageLibrary");
+const appStateTags = require('../imageHandling/domain/appState');
 
 // Assuming libraryTags and appStateTags are correctly defined and imported
 
