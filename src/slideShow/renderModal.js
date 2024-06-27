@@ -1,7 +1,8 @@
-const library = require("../imageHandling/imageLibrary");
+const { ipcRenderer } = require('electron');
+
 let slideshowInterval = null;
 
-function showModal(image, index) {
+function showModal(image, index, images) {
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
 
@@ -9,11 +10,10 @@ function showModal(image, index) {
     imageElement.setAttribute("data-index", index);
 
     modal.classList.add("show");
-    startSlideshow();
+    startSlideshow(images);
 }
 
-function startSlideshow() {
-    const images = library.getImages();
+function startSlideshow(images) {
     slideshowInterval = setInterval(() => {
         const imageElement = document.querySelector("#image-within-dialog");
         let currentIndex = parseInt(imageElement.getAttribute("data-index"));
@@ -35,7 +35,7 @@ function updateModalImage(image, index) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const images = library.getImages();
-    console.log("Initial images:", images);
-    showModal(images[0], 0);
+    ipcRenderer.on('image-data', (event, images) => {
+        showModal(images[0], 0, images);
+    });
 });
