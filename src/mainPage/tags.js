@@ -1,5 +1,6 @@
 const libraryTags = require("../imageHandling/imageLibrary");
 const appStateTags = require('../imageHandling/domain/appState');
+const {ipcRenderer} = require("electron");
 
 // Assuming libraryTags and appStateTags are correctly defined and imported
 
@@ -98,6 +99,11 @@ function toggleFavorite(event, tag) {
     }
 }
 
+function openSecondWindow() {
+    ipcRenderer.send('open-second-window', activeTags); // Send activeTags to main process
+}
+
+
 function init() {
     document.addEventListener("DOMContentLoaded", () => {
         renderTags();
@@ -108,6 +114,10 @@ function init() {
         dropdownBtn.addEventListener("click", () => {
             dropdownContent.classList.toggle("show");
         });
+    });
+
+    document.getElementById('slide-show-button').addEventListener('click', () => {
+         openSecondWindow()
     });
 }
 
