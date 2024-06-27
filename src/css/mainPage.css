@@ -1,7 +1,8 @@
 @import url('./generic/modal.css');
 @import url('./footer/pagination.css');
 @import url('./generic/gallery.css');
-@import url('generic/search.css');
+@import url('./generic/search.css');
 @import url('./menu/filter.css');
-@import url('generic/button.css');
-@import url('menu/popupMenu.css');
+@import url('./generic/button.css');
+@import url('./menu/popupMenu.css');
+@import url('./menu/settings.css');

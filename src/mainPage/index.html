@@ -12,6 +12,7 @@
   <script src="tags.js" defer></script>
   <script src="imageSelector.js"> </script>
   <script src="tagSelector.js"> </script>
+  <script src="settings.js"></script>
 
 </head>
 
@@ -54,7 +55,16 @@
     <img src="../../images/icons/media-image-plus.svg" class="icon">
     <a id="slide-show-button">slide show</a>
   </div>
+
+  <div class="menu-item">
+    <img src="../../images/icons/settings.svg" class="icon">
+    <a id="settings-button">settings</a>
+  </div>
 </div>
+
+
+
+
 
 <!--will be filled up with images-->
 <main class="gallery">
@@ -76,7 +86,6 @@
 
 <div id="popup-menu" class="popup-menu">
   <p id="total-images-selected">Total images selected: <span id="selected-images-count">0</span></p>
-
   <h3>Select Tags</h3>
   <div id="list-headers-container">
     <h4> Add tags</h4>
@@ -90,4 +99,63 @@
     <button id="change-tags-button"> change tags</button>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="setting-menu" id="settings-menu">
+  <div class="menu-header">
+    <h2 class="menu-header-title">Theme</h2>
+    <div class="theme-switcher">
+      <input type="radio" id="light-theme" name="themes" checked />
+      <label for="light-theme">
+				<span>
+					 <img src="../../images/icons/sun-light.svg" class="icon"> Light
+				</span>
+      </label>
+      <input type="radio" id="dark-theme" name="themes" />
+      <label for="dark-theme">
+				<span>
+					 <img src="../../images/icons/half-moon.svg" class="icon"> Dark
+				</span>
+      </label>
+      <input type="radio" id="black-theme" name="themes" />
+      <label for="black-theme">
+				<span>
+					 <img src="../../images/icons/brightness.svg" class="icon"> Black
+				</span>
+      </label>
+      <span class="slider"></span>
+    </div>
+  </div>
+  <div class="menu-body">
+    <a href="#"><ion-icon name="settings-outline"></ion-icon>Account Settings</a>
+    <a href="#"><ion-icon name="chatbox-ellipses-outline"></ion-icon>Give Feedback</a>
+    <a href="#"><ion-icon name="information-circle-outline"></ion-icon>About</a>
+    <a href="#"><ion-icon name="mail-outline"></ion-icon>Support</a>
+  </div>
+
+</div>
+
+
+
+<!--<div id="settings-menu" class="settings-menu">-->
+<!--  <h3>Settings</h3>-->
+<!--  <label>-->
+<!--    <input type="checkbox" id="dark-mode">-->
+<!--    Dark Mode-->
+<!--  </label>-->
+<!--  <label>-->
+<!--    <input type="checkbox" id="notifications">-->
+<!--    Enable Notifications-->
+<!--  </label>-->
+<!--  <button id="save-settings">Save</button>-->
+<!--</div>-->
 </html>

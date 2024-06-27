@@ -2,6 +2,15 @@
   "name": "fotolibrary",
   "productName": "fotolibrary",
   "version": "1.0.0",
+  "packagerConfig": {
+    "asar": true,
+    "ignore": [
+      "^\\/public$",
+      "^\\/src$",
+      "^\\/node_modules$",
+      "^\\/[.].+"
+    ]
+  },
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {

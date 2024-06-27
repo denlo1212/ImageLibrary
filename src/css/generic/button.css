@@ -1,5 +1,5 @@
 button {
-    background-color: var(--secondary-color);
+    background-color: var(--c-bg-secondary);
     color: white;
     border: none;
     border-radius: 10px;
@@ -11,14 +11,14 @@ button {
 }
 
 button:hover {
-    background-color: darken(var(--secondary-color), 10%);
+    background-color: darken(var(--c-bg-secondary), 10%);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 
 a{
     padding: 10px;
-    color: var(--gray);
+    color: var(--c-text-primary);
 }
 
 a:hover{
