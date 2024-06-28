@@ -9,7 +9,7 @@
     line-height: 1.5;
     justify-content: center;
     background-color: var(--c-bg-body);
-    transform: background-color 1s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     color: var(--c-text-primary);
 }
 

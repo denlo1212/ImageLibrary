@@ -6,16 +6,21 @@
     transform: translate(-50%, -50%);
     z-index: 4;
     opacity: 0;
-    background-color: var(--c-bg-primary);
+    background-color: rgba(0, 0, 0, 0.8);
     transition: opacity 0.3s ease, visibility 0.3s ease;
     visibility: hidden;
+
+    /* Add Flexbox properties to center content */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    color: var(--c-text-primary);
 }
 
 #settings-modal.show {
-    display: block;
     opacity: 1;
     visibility: visible;
 }
@@ -26,4 +31,17 @@
     font-size: 16px;
     cursor: pointer;
     margin-bottom: 10px;
+    color: white; /* Ensures the button is visible against the dark background */
+}
+
+#settings-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#interval {
+    margin-top: 10px;
+    padding: 5px;
+    color: var(--c-text-primary);
 }

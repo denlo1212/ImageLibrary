@@ -3,7 +3,9 @@ const appStateTag = require('../imageHandling/domain/appState');
 
 function openPopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
+    const overlay = document.getElementById('overlay');
     popupMenu.style.display = 'block';
+    overlay.style.display = 'block'; // Show the overlay
     const button = document.querySelector("#change-tags-button");
     appStateTag.setIsDialogOpen(true);
 
@@ -18,10 +20,11 @@ function openPopupMenu() {
     loadTags();
 }
 
-
 function closePopupMenu() {
     const popupMenu = document.getElementById('popup-menu');
+    const overlay = document.getElementById('overlay');
     popupMenu.style.display = 'none';
+    overlay.style.display = 'none'; // Hide the overlay
     appStateTag.setIsDialogOpen(false)
 }
 
@@ -112,7 +115,6 @@ function initializeEventListeners() {
         openPopupMenu();
     });
 
-
     document.addEventListener("keydown", function (event) {
         const state = appStateTag.getState();
         if (state.selectionMode) {
@@ -120,11 +122,11 @@ function initializeEventListeners() {
                 closePopupMenu();
             }
         }
-
     });
+
+    const overlay = document.getElementById('overlay');
+    overlay.addEventListener('click', closePopupMenu);
 }
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
     initializeEventListeners();

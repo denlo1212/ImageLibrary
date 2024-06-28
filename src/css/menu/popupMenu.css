@@ -1,6 +1,20 @@
+/* Full-screen overlay */
+#overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    z-index: 1; /* Ensure it is behind the popup menu */
+}
+
+/* Popup menu */
 #popup-menu {
+    border-radius: 10px;
     background-color: var(--c-bg-primary);
-    display: none;
+    display: none; /* Hidden by default */
     position: fixed;
     top: 50%;
     left: 50%;
@@ -12,16 +26,15 @@
     max-height: 80%;
     overflow: auto;
     color: var(--c-text-primary);
-    z-index: 1;
+    z-index: 2; /* Ensure it is above the overlay */
 }
-
 
 #tag-list-container {
     display: flex;
     gap: 20px;
 }
 
-#list-headers-container{
+#list-headers-container {
     padding-left: 50px;
     display: flex;
     gap: 150px;
@@ -66,4 +79,9 @@
 #tags-buttons-container {
     display: flex;
     align-items: center;
+}
+
+/* Show overlay and popup menu */
+.show {
+    display: block;
 }

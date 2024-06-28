@@ -1,7 +1,7 @@
 .search-box{
     background-color: var(--c-bg-secondary);
     border-radius: 10px;
-    color: white;
+    color: var(--c-text-primary);
     align-self: center;
     height: 20px;
 }
