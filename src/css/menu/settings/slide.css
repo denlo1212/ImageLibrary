@@ -1,0 +1,29 @@
+/* CSS for the modal */
+#settings-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    opacity: 0;
+    background-color: var(--c-bg-primary);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#settings-modal.show {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+#back-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}

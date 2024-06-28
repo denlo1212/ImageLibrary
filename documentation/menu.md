@@ -1,7 +1,10 @@
 # documentation
 
 ---
+`This is completely outdated!`
+
 welkom! you can find everything you need to know about the application here
+
 
 ### global variables and functions
 lets start with global variables and functions.

@@ -1,6 +1,6 @@
 button {
     background-color: var(--c-bg-secondary);
-    color: white;
+    color: var(--c-text-primary);
     border: none;
     border-radius: 10px;
     padding: 10px 20px;

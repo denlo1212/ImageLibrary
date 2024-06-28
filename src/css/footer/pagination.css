@@ -5,7 +5,7 @@
 }
 
 .pagination a {
-    color: white;
+    color: var(--c-text-primary);
     float: left;
     padding: 8px 16px;
     text-decoration: none;
@@ -16,12 +16,12 @@
 
 .pagination a.active {
     background-color: var(--active);
-    color: white;
-    border: 1px solid #4CAF50;
+    color: var(--c-text-secondary);
+    border: 1px solid var(--c-bg-secondary);
 }
 
 .pagination a:hover:not(.active) {
-    background-color: #555;
+    background-color: var(--c-bg-secondary);
 }
 
 input{

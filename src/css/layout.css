@@ -11,6 +11,7 @@ body {
     grid-template-columns: 1fr 10fr;
     grid-template-rows: auto auto 1fr auto;
     height: 100vh;
+    color: var(--c-text-primary);
 }
 
 header{

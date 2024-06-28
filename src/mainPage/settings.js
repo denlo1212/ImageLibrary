@@ -1,6 +1,10 @@
+const fs = require("fs");
+const path = require("path");
 
+const intervalFilePath = path.join(__dirname, '..' ,'..' , 'files','interval.txt');
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Toggle settings menu visibility
     document.getElementById('settings-button').addEventListener('click', function(event) {
         event.preventDefault();
         const menu = document.getElementById('settings-menu');
@@ -11,25 +15,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    var html = document.getElementsByTagName('html');
-    var radios = document.getElementsByName('themes');
+    // Theme switcher logic
+    const html = document.getElementsByTagName('html')[0];
+    const radios = document.getElementsByName('themes');
 
-    for (i = 0; i < radios.length; i++) {
-        radios[i].addEventListener('change', function() {
-            html[0].classList.remove(html[0].classList.item(0));
-            html[0].classList.add(this.id);
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            html.classList.remove(html.classList.item(0));
+            html.classList.add(this.id);
         });
-    }
+    });
 
-    // document.getElementById('save-settings').addEventListener('click', function() {
-    //     const darkMode = document.getElementById('dark-mode').checked;
-    //     const notifications = document.getElementById('notifications').checked;
-    //
-    //     console.log('Dark Mode:', darkMode);
-    //     console.log('Notifications:', notifications);
-    //
-    //     alert('Settings saved!');
-    //     document.getElementById('settings-menu').style.display = 'none';
-    // });
+    // Modal and form handling
+    const displaySettingsLink = document.getElementById('display-settings-link');
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsForm = document.getElementById('settings-form');
+    const backButton = document.getElementById('back-button');
 
-})
+    displaySettingsLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        settingsModal.classList.add('show');
+    });
+
+    backButton.addEventListener('click', () => {
+        settingsModal.classList.remove('show');
+    });
+
+    settingsForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const interval = document.getElementById('interval').value;
+        fs.writeFile(intervalFilePath, interval, (err) => {
+            if (err) {
+                console.error('Error saving interval:', err);
+                return;
+            }
+            alert('Interval saved successfully!');
+            settingsModal.classList.remove('show');
+        });
+    });
+});
