@@ -9,11 +9,11 @@ class ImageLibrary {
         }
 
         this.uniqueTags = new Set();
-        this.backUpList = [];
+        this.backUpList = new Map();
         this.images = new Map();
         this.selectedImages = new Map();
 
-        this.directoryPath = path.join(__dirname,"..", "..", "images", "outputImages");
+        this.directoryPath = path.join(__dirname, "..", "..", "images", "outputImages");
         this.loadImages(this.directoryPath);
 
         ImageLibrary.instance = this;
@@ -39,8 +39,8 @@ class ImageLibrary {
                         this.loadImages(filePath, newTags);
                     } else if (fileStat.isFile() && this.isImageFile(filePath)) {
                         const foto = new Foto(filePath, "placeholder", file, parentTags.map(tag => tag.toLowerCase()));
-                        const index = this.backUpList.length;
-                        this.backUpList.push(foto);
+                        const index = this.backUpList.size;
+                        this.backUpList.set(index, foto);
                         this.images.set(index, foto);
                         parentTags.forEach(tag => this.uniqueTags.add(tag.toLowerCase()));
                     }
@@ -66,7 +66,7 @@ class ImageLibrary {
     }
 
     getImagesMap() {
-        return new Map(this.images)
+        return new Map(this.images);
     }
 
     filterImages(tags) {
@@ -117,7 +117,7 @@ class ImageLibrary {
     }
 
     reloadImagesFromDirectory() {
-        this.backUpList = [];
+        this.backUpList = new Map();
         this.images = new Map();
         this.uniqueTags = new Set();
         this.selectedImages = new Map();
@@ -165,8 +165,8 @@ class ImageLibrary {
 
             foto.path = newPath;
 
-            if (index < this.backUpList.length) {
-                this.backUpList[index] = foto;
+            if (this.backUpList.has(index)) {
+                this.backUpList.set(index, foto);
             } else {
                 console.error(`Index ${index} out of range in backupList`);
             }
@@ -186,6 +186,16 @@ class ImageLibrary {
             console.log(`Moved image from ${oldPath} to ${newPath}`);
         } else {
             console.error(`Image file not found at ${oldPath}`);
+        }
+    }
+
+    deleteImage(index) {
+        const image = this.backUpList.get(index);
+        if (image) {
+            fs.unlinkSync(image.path);
+            this.backUpList.delete(index);
+        } else {
+            console.log(`Image at index ${index} does not exist.`);
         }
     }
 }

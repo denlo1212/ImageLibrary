@@ -5,7 +5,7 @@ const appState = require('../imageHandling/domain/appState');  // Importing the 
 document.addEventListener("DOMContentLoaded", () => {
     const toggleSelectBtn = document.querySelector(".toggle-select-button");
     const gallery = document.querySelector(".gallery");
-    const actionsContainer = document.querySelector(".actions-container");
+    const actionsContainer = document.querySelectorAll(".actions-container");
 
     const state = appState.getState();
     let selectionMode = state.selectionMode;
@@ -23,13 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const darkLayer = container.querySelector(".dark-layer")
             if (enable) {
                 checkbox.style.display = "block";
-                actionsContainer.style.display = "block";
+                actionsContainer.forEach(container =>{
+                    container.style.display = "block";
+                })
+
             } else {
                 librarySelect.resetSelectedList()
                 checkbox.style.display = "none";
                 checkbox.checked = false;
                 darkLayer.style.display = "none"
-                actionsContainer.style.display = "none";
+                actionsContainer.forEach(container =>{
+                    container.style.display = "none";
+                })
             }
         });
     }

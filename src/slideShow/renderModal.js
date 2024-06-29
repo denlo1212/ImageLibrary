@@ -8,6 +8,8 @@ const intervalFilePath = path.join(__dirname, '..' ,'..' , 'files','interval.txt
 function showModal(images, index) {
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
+    console.log('image index: '+ index)
+    console.log(images[index])
 
     imageElement.setAttribute("src", images[index].path);
     imageElement.setAttribute("data-index", index);
