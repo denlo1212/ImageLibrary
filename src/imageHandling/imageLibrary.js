@@ -179,7 +179,7 @@ class ImageLibrary {
         const oldPath = foto.path;
 
         if (fs.existsSync(oldPath)) {
-            fs.mkdirSync(path.dirname(newPath), { recursive: true });
+            fs.mkdirSync(path.dirname(newPath), {recursive: true});
             fs.copyFileSync(oldPath, newPath);
             fs.unlinkSync(oldPath);
 
@@ -189,14 +189,17 @@ class ImageLibrary {
         }
     }
 
-    deleteImage(index) {
-        const image = this.backUpList.get(index);
-        if (image) {
-            fs.unlinkSync(image.path);
-            this.backUpList.delete(index);
-        } else {
-            console.log(`Image at index ${index} does not exist.`);
+    deleteSelectedImages() {
+        for (const index of this.selectedImages.keys()) {
+            const image = this.backUpList.get(index);
+            if (image) {
+                fs.unlinkSync(image.path);
+                this.backUpList.delete(index);
+            } else {
+                console.log(`Image at index ${index} does not exist.`);
+            }
         }
+        this.selectedImages = new Map();
     }
 }
 

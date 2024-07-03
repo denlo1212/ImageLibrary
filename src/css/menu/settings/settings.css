@@ -11,9 +11,6 @@
     background-color: var(--c-bg-body);
     transition: opacity 0.3s ease, visibility 0.3s ease;
     color: var(--c-text-primary);
-}
-
-.setting-menu {
     z-index: 3;
     top: 30%;
     left: 50%;
@@ -22,9 +19,11 @@
     width: 90%;
     margin-top: 80px;
     max-width: 320px;
-    background-color: var(--c-bg-primary);
-    transition: background-color .30s ease;
     border-radius: 15px;
+}
+
+.setting-menu {
+
 }
 
 /* header */
