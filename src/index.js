@@ -46,7 +46,7 @@ function createSecondWindow(tags) {
     }
   });
 
-  secondWindow.webContents.openDevTools();
+  // secondWindow.webContents.openDevTools();
   secondWindow.maximize();
   secondWindow.loadFile(path.join(__dirname, 'slideShow/slideShow.html'));
   secondWindow.setMenu(null);

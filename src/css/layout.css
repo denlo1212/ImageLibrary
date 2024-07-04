@@ -12,11 +12,12 @@ body {
     grid-template-rows: auto auto 1fr auto;
     height: 100vh;
     color: var(--c-text-primary);
+
 }
 
 header{
     grid-area: header;
-    padding: 20px;
+    padding: 10px;
     display: flex;
 
 }
@@ -56,5 +57,10 @@ footer {
 
 label{
     color: white;
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 

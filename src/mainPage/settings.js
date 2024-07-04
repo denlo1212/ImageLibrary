@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const intervalFilePath = path.join(__dirname, '..' ,'..' , 'files','interval.txt');
+const themeFilePath = path.join(__dirname, '..' ,'..' , 'files','theme.txt');
 
 document.addEventListener('DOMContentLoaded', () => {
     // Toggle settings menu visibility
@@ -19,14 +20,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const html = document.getElementsByTagName('html')[0];
     const radios = document.getElementsByName('themes');
 
+    // Function to apply the theme
+    function applyTheme(theme) {
+        if (html.classList.length > 0) {
+            html.classList.remove(html.classList.item(0));
+        }
+        html.classList.add(theme);
+    }
+
+    fs.readFile(themeFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading theme file:', err);
+        } else {
+            const savedTheme = data.trim();
+            applyTheme(savedTheme);
+            const radio = document.getElementById(savedTheme);
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+    });
+
     radios.forEach(radio => {
         radio.addEventListener('change', function() {
-            html.classList.remove(html.classList.item(0));
-            html.classList.add(this.id);
+            const selectedTheme = this.id;
+            applyTheme(selectedTheme);
+            // Save the selected theme to themeFilePath
+            fs.writeFile(themeFilePath, selectedTheme, (err) => {
+                if (err) {
+                    console.error('Error saving theme:', err);
+                }
+            });
         });
     });
 
-    // Modal and form handling
     const displaySettingsLink = document.getElementById('display-settings-link');
     const settingsModal = document.getElementById('settings-modal');
     const settingsForm = document.getElementById('settings-form');
