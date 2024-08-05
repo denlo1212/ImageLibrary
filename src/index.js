@@ -102,12 +102,6 @@ ipcMain.on('open-file-dialog', () => {
   openFileDialog();
 });
 
-// IPC handler to open second window
-// ipcMain.on('open-second-window', () => {
-//   if (!secondWindow) {
-//     createSecondWindow();
-//   }
-// });
 
 ipcMain.on('open-second-window', (event, tags) => {
   if (!secondWindow) {

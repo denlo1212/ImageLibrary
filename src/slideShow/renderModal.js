@@ -15,7 +15,8 @@ function showModal(images, index) {
     imageElement.setAttribute("data-index", index);
 
     modal.classList.add("show");
-    startSlideshow(images);
+    startRandomSlideShow(images)
+    // startSlideshow(images);
 }
 
 function startSlideshow(images) {
@@ -35,6 +36,39 @@ function startSlideshow(images) {
         }
     })
 
+}
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function startRandomSlideShow(images) {
+    fs.readFile(intervalFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading interval file:', err);
+            return;
+        } else {
+            let indices = [...Array(images.length).keys()]; // Create an array of image indices
+            indices = shuffleArray(indices); // Shuffle the array of indices
+            let currentIndex = 0;
+
+            slideshowInterval = setInterval(() => {
+                if (currentIndex >= indices.length) {
+                    console.log(currentIndex)
+                    indices = shuffleArray(indices); // Reshuffle indices when all images have been displayed
+                    currentIndex = 0;
+                }
+
+                const nextIndex = indices[currentIndex];
+                const nextImage = images[nextIndex];
+                updateModalImage(nextImage, nextIndex);
+                currentIndex++;
+            }, data * 1000);
+        }
+    });
 }
 
 // function stopSlideshow() {
