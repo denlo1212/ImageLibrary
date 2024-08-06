@@ -22,20 +22,20 @@ function randomImage() {
 async function showModal(images, index) {
     const modal = document.getElementById("image-dialog");
     const imageElement = modal.querySelector("#image-within-dialog");
-    console.log('image index: ' + index);
-    console.log(images[index]);
-
-    imageElement.setAttribute("src", images[index].path);
-    imageElement.setAttribute("data-index", index);
-
-    modal.classList.add("show");
 
     const shouldStartRandomSlideshow = await randomImage();
     if (shouldStartRandomSlideshow) {
+        const randomIndex = Math.floor(Math.random() * images.length);
+        imageElement.setAttribute("src", images[randomIndex].path);
+        imageElement.setAttribute("data-index", randomIndex);
         startRandomSlideShow(images);
     } else {
+        imageElement.setAttribute("src", images[index].path);
+        imageElement.setAttribute("data-index", index);
         startSlideshow(images);
     }
+
+    modal.classList.add("show");
 }
 
 function startSlideshow(images) {
@@ -101,9 +101,6 @@ document.addEventListener('DOMContentLoaded', function () {
         await showModal(images, 0);
     });
 });
-
-
-
 
 // function stopSlideshow() {
 //     clearInterval(slideshowInterval);

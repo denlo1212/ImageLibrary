@@ -1,9 +1,13 @@
 const path = require("path");
 const fs = require("fs");
 const Foto = require("./domain/foto");
+const SortType = require("./domain/sortType");
+const SortOrder = require("./domain/sortOrder");
 
 class ImageLibrary {
+
     constructor() {
+
         if (ImageLibrary.instance) {
             return ImageLibrary.instance;
         }
@@ -14,6 +18,7 @@ class ImageLibrary {
         this.selectedImages = new Map();
 
         this.directoryPath = path.join(__dirname, "..", "..", "images", "outputImages");
+        // this.directoryPath = path.resolve('D:\\homework');
         this.loadImages(this.directoryPath);
 
         ImageLibrary.instance = this;
@@ -38,7 +43,9 @@ class ImageLibrary {
                         const newTags = [...parentTags, file];
                         this.loadImages(filePath, newTags);
                     } else if (fileStat.isFile() && this.isImageFile(filePath)) {
-                        const foto = new Foto(filePath, "placeholder", file, parentTags.map(tag => tag.toLowerCase()));
+                        const {createdAt, modifiedAt} = this.getFileDatesSync(filePath);
+                        const fileName = path.basename(file, path.extname(file));
+                        const foto = new Foto(filePath, fileName, file, parentTags.map(tag => tag.toLowerCase()),new Date(createdAt),new Date(modifiedAt));
                         const index = this.backUpList.size;
                         this.backUpList.set(index, foto);
                         this.images.set(index, foto);
@@ -55,6 +62,26 @@ class ImageLibrary {
         const sortedUniqueTags = Array.from(this.uniqueTags).sort();
         this.uniqueTags.clear();
         sortedUniqueTags.forEach(tag => this.uniqueTags.add(tag));
+
+        // this.backUpList.forEach((value, key) =>
+        //     console.log(value.name))
+
+    }
+
+    getFileDatesSync(filePath) {
+        try {
+            const stats = fs.statSync(filePath);
+            return {
+                createdAt: stats.birthtime.toISOString(),
+                modifiedAt: stats.mtime.toISOString()
+            };
+        } catch (err) {
+            console.error('Error getting file dates:', err);
+            return {
+                createdAt: null,
+                modifiedAt: null
+            };
+        }
     }
 
     getAmountOfImages() {
@@ -201,6 +228,44 @@ class ImageLibrary {
         }
         this.selectedImages = new Map();
     }
+
+    sortFunction(type, order) {
+        return (a, b) => {
+            let comparison = 0;
+
+            if (type === SortType.CREATED) {
+                comparison = a[1].created - b[1].created;
+            } else if (type === SortType.MODIFIED) {
+                comparison = a[1].modified - b[1].modified;
+            } else if (type === SortType.ALPHABETICAL) {
+                const nameA = a[1].name ? a[1].name.toString() : '';
+                const nameB = b[1].name ? b[1].name.toString() : '';
+                comparison = nameA.localeCompare(nameB);
+            } else {
+                throw new Error(`Unsupported sort type: ${type}`);
+            }
+
+            return order === SortOrder.ASC ? comparison : -comparison;
+        };
+    }
+
+    sortImages(type, order) {
+        if (!Object.values(SortOrder).includes(order)) {
+            throw new Error(`Unsupported sort order: ${order}`);
+        }
+
+        if (!Object.values(SortType).includes(type)) {
+            throw new Error(`Unsupported sort type: ${type}`);
+        }
+
+        const entriesArray = Array.from(this.backUpList.entries());
+        const sortFn = this.sortFunction(type, order);
+        entriesArray.sort(sortFn);
+
+        this.backUpList = new Map(entriesArray);
+        this.images = new Map(entriesArray);
+    }
+
 }
 
 const library = new ImageLibrary();

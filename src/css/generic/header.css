@@ -22,3 +22,34 @@ header > .actions-container:last-child{
 
 
 
+
+
+
+.dropdown {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--c-bg-secondary);
+    color: var(--c-text-primary);
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: none;
+}
+
+/*.dropdown:focus {*/
+/*    border-color: #007bff;*/
+/*    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);*/
+/*    outline: none;*/
+/*}*/
+
+.dropdown option {
+    padding: 10px;
+}
+
+.dropdown option:hover {
+    background-color: #e9ecef;
+}
+
+
+
+

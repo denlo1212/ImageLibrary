@@ -68,6 +68,8 @@ function showModal(image, index) {
     imageElement.setAttribute("src", image.path);
     imageElement.setAttribute("data-index", index);
 
+    console.log(image.date)
+
     // Show modal
     modal.classList.add("show");
 
