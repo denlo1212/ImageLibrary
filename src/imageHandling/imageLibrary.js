@@ -258,11 +258,11 @@ class ImageLibrary {
             throw new Error(`Unsupported sort type: ${type}`);
         }
 
-        const entriesArray = Array.from(this.backUpList.entries());
+
+        const entriesArray = Array.from(this.images.entries());
         const sortFn = this.sortFunction(type, order);
         entriesArray.sort(sortFn);
 
-        this.backUpList = new Map(entriesArray);
         this.images = new Map(entriesArray);
     }
 
